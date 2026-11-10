@@ -22,7 +22,7 @@ export function renderCover(container) {
         ? '<strong>This is a read-only file.</strong> You can browse every page, but nothing can be changed. Click <b>Edit</b> at the top right of the page to make changes.'
         : '<strong>You are editing.</strong> Changes save in this browser only. Click <b>Done editing</b> at the top right of the page to go back to read-only.'}
     </div>
-    <div class="page-title">Executive Assistant to COO at Simile</div>
+    <div class="page-title">Office Manager at Mecka</div>
 
     <div class="card doc-card home-about" id="home-about">
       <h4 style="margin:0 0 4px;">About Naureen</h4>

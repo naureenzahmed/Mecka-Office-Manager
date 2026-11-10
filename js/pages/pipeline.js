@@ -63,7 +63,7 @@ function renderRevenue() {
         </div>
       </div>
       <div class="pf-chart-wrap">
-        <svg class="pf-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Simile annualized revenue run-rate by month, from $0 in ${monthName(pts[0].month, true)} to ${money(last.revenue)} in ${monthName(last.month, true)}, growing ${Math.round(last.revenue / growthFrom.revenue)}x in the last 5 months.">
+        <svg class="pf-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mecka annualized revenue run-rate by month, from $0 in ${monthName(pts[0].month, true)} to ${money(last.revenue)} in ${monthName(last.month, true)}, growing ${Math.round(last.revenue / growthFrom.revenue)}x in the last 5 months.">
           <rect class="pf-band" x="${bandX}" y="${PAD.t}" width="${x(n - 1) - bandX}" height="${H - PAD.t - PAD.b}" />
           <text class="pf-band-label" x="${(bandX + x(n - 1)) / 2}" y="${PAD.t - 10}" text-anchor="middle">${Math.round(last.revenue / growthFrom.revenue)}x in the last 5 months</text>
           ${ticks.map((t) => `

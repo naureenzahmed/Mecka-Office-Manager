@@ -453,7 +453,7 @@ export function seedDocLibrary() {
       entries: [
         doc('tpl-investor-newsletter', 'Investor Newsletter Template', 'Monthly. Sections: highlights, lowlights, key metrics (revenue, pipeline, headcount), asks and next steps.'),
         doc('tpl-board-deck', 'Board Deck Template', 'Quarterly. Sections: summary, financials, pipeline and forecast, product updates, hiring, risks and decisions needed.'),
-        doc('tpl-sales-deck-enterprise', 'Sales Deck Template: Enterprise', 'For enterprise buyers. Problem, how Simile works, customer proof, pilot plan, pricing and next steps.'),
+        doc('tpl-sales-deck-enterprise', 'Sales Deck Template: Enterprise', 'For enterprise buyers. Problem, how Mecka works, customer proof, pilot plan, pricing and next steps.'),
         doc('tpl-sales-deck-consumer', 'Sales Deck Template: Consumer & Retail', 'Same structure as the enterprise deck, with consumer research use cases and retail case studies.'),
       ],
     },
@@ -1291,7 +1291,7 @@ export const BOARD_SECTIONS = [
       { key: 'role', label: 'Partner Role', type: 'multiline' },
       { key: 'linkedin', label: 'Partner LinkedIn', type: 'url' },
       { key: 'linkedinStatus', label: 'LinkedIn Status' },
-      { key: 'why', label: 'Why They Fit Simile', type: 'multiline' },
+      { key: 'why', label: 'Why They Fit Mecka', type: 'multiline' },
       { key: 'relationship', label: 'Relationship', width: 'sm' },
       { key: 'source', label: 'Source', type: 'url' },
       { key: 'poc', label: 'POC' },
@@ -1333,7 +1333,7 @@ export function isCurrentInvestor(firm, current = CURRENT_INVESTORS.map(([f]) =>
   return current.some((f) => firmKey(f) === firmKey(firm));
 }
 
-// Who at Simile owns the relationship. Only a couple are filled in so far.
+// Who at Mecka owns the relationship. Only a couple are filled in so far.
 export const POTENTIAL_POCS = ['Lainie Yallen', 'Joon Sung Park'];
 
 export function potentialInvestorRows() {
@@ -1662,7 +1662,7 @@ const pipelineFields = (statuses) => [
 export const PIPELINE_SECTIONS = [
   {
     id: 'target-accounts', title: 'Target Accounts', addLabel: 'Add account',
-    note: 'Named accounts we are going after. PoC is who owns the account at Simile; Buyer is who signs on their side.',
+    note: 'Named accounts we are going after. PoC is who owns the account at Mecka; Buyer is who signs on their side.',
     fields: pipelineFields(['Meeting booked', 'Demo', 'Proposal sent', 'Closed won', 'Closed lost']),
   },
   {
