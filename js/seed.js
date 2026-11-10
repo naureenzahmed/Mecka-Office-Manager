@@ -3,14 +3,15 @@ import { addDays, todayISO, uid } from './utils.js';
 // Departments. These are the "teams" used across the roadmap, OKRs and Team Management.
 export const TEAMS = [
   { id: 'deployments', name: 'Deployments', color: '#ff7a66' },
-  { id: 'marketing', name: 'Marketing', color: '#7fb8e6' },
-  { id: 'hr', name: 'HR', color: '#e0a95a' },
-  { id: 'evals', name: 'Evals', color: '#b48ee0' },
-  { id: 'consumer', name: 'Consumer', color: '#5fc4c4' },
+  { id: 'marketing', name: 'Growth', color: '#7fb8e6' },
+  { id: 'hr', name: 'People', color: '#e0a95a' },
+  { id: 'evals', name: 'Research & Evals', color: '#b48ee0' },
+  { id: 'consumer', name: 'Data Operations', color: '#5fc4c4' },
   { id: 'ceo', name: 'CEO Office', color: '#e88fb4' },
-  { id: 'revops', name: 'Revenue Operations', color: '#a3c45f' },
-  // Engineering and Product don't report to the COO, so they show in Team Management but not on the OKR page.
+  { id: 'revops', name: 'Partnerships & Deal Desk', color: '#a3c45f' },
+  // Engineering, Hardware and Product don't report to the COO, so they show in Team Management but not on the OKR page.
   { id: 'engineering', name: 'Engineering', color: '#6c7ee0', okr: false },
+  { id: 'hardware', name: 'Hardware', color: '#c98a5a', okr: false },
   { id: 'product', name: 'Product', color: '#e6cf5a', okr: false },
 ];
 
@@ -24,222 +25,69 @@ export const BANDWIDTH = [
   { key: 'over', label: 'Needs to be freed up' },
 ];
 
-// Leadership: the Schedule Management names, with no department (shown as Leadership).
+// Leadership: the four co-founders, with no department (shown as Leadership).
 const LEADER_BANDWIDTH = {
-  'Lainie Yallen': 'over', 'Eileen Smith': 'full', 'Julia Lauer': 'open', 'Danny Wymer': 'full', 'Madison Fox': 'open',
-  'Mihika Kapoor': 'over', 'Matan Amir': 'full', 'Joon Sung Park': 'open', 'Michael Bernstein': 'full',
+  'Josh Gao': 'over', 'Duy Nguyen': 'over', 'Jason Chong': 'full', 'Mogen Cheng': 'full',
 };
 
-// Team members in each department, with their bandwidth.
+// Team members in each department, with their bandwidth. Kevin Hu, Anthony Tat and Eric Lok are on Mecka's
+// founding team (Upstarts Media, Aug 2025); their departments here are a best guess. The other entries are
+// role placeholders, several matching Mecka's open roles. Replace them with real names.
 export const TEAM_MEMBERS = [
-  ['Rory Pan', 'deployments', 'over'], ['Ryan Boyd', 'deployments', 'full'], ['Gurbani Singh', 'deployments', 'open'],
-  ['Sofia Russo', 'marketing', 'full'], ['Olivia Wang', 'marketing', 'full'], ['Shannon Hittson', 'marketing', 'open'],
-  ['Ally Waldman', 'hr', 'open'], ['Christian Guanzing', 'hr', 'full'],
-  ['Kritarth Anand', 'evals', 'over'], ['Skylar Wang', 'evals', 'full'], ['Nico Cavalluzzi', 'evals', 'open'],
-  ['Estela L. Franca', 'consumer', 'full'], ['Alexandre A.', 'consumer', 'open'],
-  ['Sanjeev Musuvathy', 'ceo', 'full'],
-  ['Noah Glazov', 'revops', 'over'], ['Amy Shorter', 'revops', 'open'],
+  ['Deployment Lead', 'deployments', 'over'], ['Deployment Engineer', 'deployments', 'full'], ['Partner Operations Manager', 'deployments', 'open'],
+  ['Growth Lead', 'marketing', 'full'], ['Growth Marketing Associate', 'marketing', 'open'],
+  ['People Operations Lead', 'hr', 'full'], ['Technical Recruiter', 'hr', 'open'],
+  ['Evals Lead', 'evals', 'over'], ['Research Engineer, RL Env', 'evals', 'full'], ['Research Engineer, World Models', 'evals', 'open'],
+  ['Eric Lok', 'consumer', 'full'], ['Capture Operations Lead', 'consumer', 'over'], ['Operator Network Manager', 'consumer', 'full'], ['Data QA Lead', 'consumer', 'open'],
+  ['Chief of Staff', 'ceo', 'full'],
+  ['Data Partnerships Lead', 'revops', 'over'], ['Partnerships Lead (Supply)', 'revops', 'full'], ['Strategic Finance Manager', 'revops', 'open'],
 ];
 
-// More of the team, added later. Saved data gets anyone here who is missing.
+// More of the team. Saved data gets anyone here who is missing.
 export const MORE_TEAM_MEMBERS = [
-  ['Blake Pender', 'revops', 'full'], ['Sam Collura', 'revops', 'open'],
-  ['Mika Okamoto', 'evals', 'full'], ['Sanjay Kairam', 'evals', 'over'], ['Sam Hasani', 'evals', 'open'],
-  ['Maria Dulce Zamora', 'ceo', 'over'],
-  ['Tommy F.', 'hr', 'full'],
-  ['Amir Hakimjavadi', 'engineering', 'full'], ['Manav Rathod', 'engineering', 'open'], ['Lucas Haarmann', 'engineering', 'full'],
-  ['Carina Ramos', 'engineering', 'over'], ['Rohit Chouhan', 'engineering', 'open'], ['Tiffany Ding', 'engineering', 'full'],
-  ['Sahana Srinivasan', 'engineering', 'open'], ['Jason Xiong', 'engineering', 'full'], ['Jenning Chen', 'engineering', 'over'],
-  ['Sarah C.', 'engineering', 'full'], ['Tony Lee', 'engineering', 'open'], ['Chinmay Kulkarni', 'engineering', 'full'],
-  ['Isabelle L.', 'product', 'full'], ['Jasmine Stoy', 'product', 'open'], ['Sam Catania', 'product', 'over'], ['Keeyen Y.', 'product', 'full'],
-  // Leadership (no department).
-  ['Chetan Patel', null, 'full'], ['Jyothi Vallurupalli', null, 'over'], ['Arturo Rajlevsky', null, 'open'],
-  ['Chris Jensen', 'revops', 'over'], ['Danny Brown', 'revops', 'full'], ['Sam O\'Meara', 'revops', 'full'], ['Giorgio Loiacono', 'revops', 'open'],
-  ['Lori Ferro', 'revops', 'full'], ['Conor Leary', 'revops', 'open'], ['Diane O\'Hara', 'revops', 'open'],
-  ['Matt Smith', 'deployments', 'over'], ['Zoe Y.', 'deployments', 'full'], ['Christina Neiva de Figueiredo', 'deployments', 'open'],
-  ['Shrushti M.', 'deployments', 'full'], ['Alex Quill', 'deployments', 'open'], ['Sarah Salzman', 'deployments', 'full'],
-  ['Rehan Bhiwandiwalla', 'deployments', 'open'], ['Emily Nelsen', 'deployments', 'full'], ['Patrick O\'Brien', 'deployments', 'open'],
-  ['Adriana Jimenez', 'deployments', 'full'],
-  ['Alexander Dang', 'evals', 'full'],
-  ['E.J. Labaria III', 'hr', 'open'],
-  ['Christopher P.', 'engineering', 'open'], ['Zicheng Zhen', 'engineering', 'full'], ['Quan Nguyen', 'engineering', 'open'],
-  ['Antonio Serrano', 'engineering', 'full'], ['Mike White', 'engineering', 'over'],
-  ['Natasha Tenggoro', 'product', 'full'],
+  ['Kevin Hu', 'engineering', 'over'], ['Anthony Tat', 'engineering', 'full'], ['Data Platform Engineer', 'engineering', 'open'],
+  ['Motion Tracking Engineer', 'engineering', 'full'], ['3D Reconstruction Engineer', 'engineering', 'open'],
+  ['Tactile Gloves Lead', 'hardware', 'over'], ['Hardware Special Projects Lead', 'hardware', 'full'], ['Edge ML Engineer', 'hardware', 'open'],
+  ['Data Tools PM', 'product', 'full'], ['Product Designer', 'product', 'open'],
 ];
 
-// Old placeholder names and the real people who replaced them, used to update saved data.
-// Isaac Grant's work went to Sanjeev Musuvathy, and Olivia moved from Leadership to Marketing.
-export const NAME_CHANGES = {
-  Lainie: 'Lainie Yallen', Eileen: 'Eileen Smith', Julia: 'Julia Lauer', Olivia: 'Olivia Wang', Madison: 'Madison Fox',
-  Mihika: 'Mihika Kapoor', Matan: 'Matan Amir', Joon: 'Joon Sung Park', Michael: 'Michael Bernstein',
-  'Priya Shah': 'Rory Pan', 'Marcus Lee': 'Ryan Boyd', 'Hannah Brooks': 'Gurbani Singh',
-  'Sofia Alvarez': 'Sofia Russo', 'Ben Carter': 'Shannon Hittson',
-  'Grace Kim': 'Ally Waldman', 'Daniel Okafor': 'Christian Guanzing',
-  'Leo Fischer': 'Kritarth Anand', 'Ava Thompson': 'Skylar Wang', 'Ryan Patel': 'Nico Cavalluzzi',
-  'Maya Nguyen': 'Estela L. Franca', 'Ethan Walsh': 'Alexandre A.',
-  'Zoe Martin': 'Sanjeev Musuvathy', 'Isaac Grant': 'Sanjeev Musuvathy',
-  'Noah Rivera': 'Noah Glazov', 'Chloe Dubois': 'Amy Shorter',
-};
+// Old names and the people who replaced them, used to update saved data. Empty for the Mecka site.
+export const NAME_CHANGES = {};
 
 // What each person is working on right now, shown when you click them in Team Management.
 export const PERSON_FOCUS = {
-  "Lainie Yallen": [
-    "Q4 board meeting prep",
-    "Series B investor follow-ups",
-    "Hiring a Chief of Staff"
-  ],
-  "Eileen Smith": [
-    "Consumer insights roadmap",
-    "Customer check-ins"
-  ],
-  "Julia Lauer": [
-    "Renewal calls",
-    "Quirk's LA conference plan"
-  ],
-  "Danny Wymer": [
-    "Customer QBRs",
-    "Q4 pipeline review"
-  ],
-  "Madison Fox": [
-    "Deployment capacity planning",
-    "Client kickoffs"
-  ],
-  "Mihika Kapoor": [
-    "Product roadmap review",
-    "Prospect demos"
-  ],
-  "Matan Amir": [
-    "Platform reliability",
-    "Engineering hiring plan"
-  ],
-  "Joon Sung Park": [
-    "Board meeting prep",
-    "Customer QBR prep"
-  ],
-  "Michael Bernstein": [
-    "Simulation accuracy research",
-    "Prospect demos"
-  ],
-  "Rory Pan": [
-    "Lead the CVS onsite plan",
-    "Fix data access for the Wealthfront pilot",
-    "Deployment checklist v2"
-  ],
-  "Ryan Boyd": [
-    "Set up the Suntory deployment",
-    "Weekly deployment status report"
-  ],
-  "Gurbani Singh": [
-    "Shadow the Itaú rollout",
-    "Draft the client QBR deck"
-  ],
-  "Sofia Russo": [
-    "Quirk's LA booth materials",
-    "Q4 case study with Gallup"
-  ],
-  "Olivia Wang": [
-    "December offsite venue",
-    "November newsletter"
-  ],
-  "Shannon Hittson": [
-    "Paid ads refresh",
-    "Event follow-up emails"
-  ],
-  "Ally Waldman": [
-    "Chief of Staff interview loop",
-    "Benefits enrollment reminders"
-  ],
-  "Christian Guanzing": [
-    "Onboarding for three new hires",
-    "Update Ashby pipeline stages"
-  ],
-  "Kritarth Anand": [
-    "Weekly eval report",
-    "Benchmark refresh for consumer models",
-    "Client eval for Deloitte"
-  ],
-  "Skylar Wang": [
-    "Eval dashboard cleanup",
-    "Review simulation accuracy"
-  ],
-  "Nico Cavalluzzi": [
-    "Eval methodology doc",
-    "Spot-check client results"
-  ],
-  "Estela L. Franca": [
-    "Suntory research findings",
-    "Survey design for the Nike lead"
-  ],
-  "Alexandre A.": [
-    "Consumer panel recruiting",
-    "Insights summary for CVS"
-  ],
-  "Sanjeev Musuvathy": [
-    "Q4 board deck draft",
-    "November investor update",
-    "CEO travel for December",
-    "NYC customer dinner prep"
-  ],
-  "Noah Glazov": [
-    "Pipeline review prep",
-    "HubSpot cleanup",
-    "Forecast model update"
-  ],
-  "Amy Shorter": [
-    "Lead list enrichment",
-    "Renewals contract tracker"
-  ],
-  "Blake Pender": ["Enterprise prospect outreach", "Pfizer proposal follow-up"],
-  "Sam Collura": ["Quirk's LA lead follow-up", "Demo scheduling"],
-  "Mika Okamoto": ["Eval suite for new simulation features", "Weekly eval report review"],
-  "Sanjay Kairam": ["Simulation accuracy study", "Client eval for Deloitte", "Eval methodology doc review"],
-  "Sam Hasani": ["Data pipeline for client evals", "Survey data cleanup"],
-  "Maria Dulce Zamora": ["Founders' calendars", "December board meeting logistics", "Founder travel"],
-  "Tommy F.": ["Engineering candidate sourcing", "Interview scheduling"],
-  "Amir Hakimjavadi": ["Simulation engine performance"],
-  "Manav Rathod": ["Client data connectors"],
-  "Lucas Haarmann": ["Agent memory improvements"],
-  "Carina Ramos": ["Platform reliability fixes", "On-call rotation"],
-  "Rohit Chouhan": ["API rate limits"],
-  "Tiffany Ding": ["Simulation dashboard front end"],
-  "Sahana Srinivasan": ["Model fine-tuning experiments"],
-  "Jason Xiong": ["Deployment tooling"],
-  "Jenning Chen": ["Infrastructure cost review", "Security review for the Itaú rollout"],
-  "Sarah C.": ["Population modeling for consumer panels"],
-  "Tony Lee": ["Batch simulation jobs"],
-  "Chinmay Kulkarni": ["Human-AI interaction research"],
-  "Isabelle L.": ["Client feedback roundup", "Q1 product spec"],
-  "Jasmine Stoy": ["Onboarding flow redesign"],
-  "Sam Catania": ["Product roadmap review", "Pricing page update", "Customer interviews"],
-  "Keeyen Y.": ["Design system refresh", "Simulation report templates"],
-  "Chetan Patel": ["Data strategy for Q1", "Client data access standards"],
-  "Jyothi Vallurupalli": ["GTM weekly agenda", "Q4 pipeline targets", "Sales hiring plan"],
-  "Arturo Rajlevsky": ["Enterprise pricing review", "Partner channel plan"],
-  "Chris Jensen": ["Global sales forecast", "Delta Air Lines demo"],
-  "Danny Brown": ["Pfizer proposal", "Strategic account plans"],
-  "Sam O'Meara": ["Verizon demo follow-up", "Strategic account renewals"],
-  "Giorgio Loiacono": ["Marriott intro", "Sales playbook update"],
-  "Lori Ferro": ["Mastercard lead follow-up", "Event lead qualification"],
-  "Conor Leary": ["Spotify qualification call"],
-  "Diane O'Hara": ["Outbound sequences", "Lead list review"],
-  "Matt Smith": ["Laptops for new hires", "Deployment ops checklist"],
-  "Zoe Y.": ["Wealthfront pilot setup"],
-  "Christina Neiva de Figueiredo": ["Itaú rollout support", "Client training sessions"],
-  "Shrushti M.": ["Client onboarding calls"],
-  "Alex Quill": ["Deployment status updates"],
-  "Sarah Salzman": ["Gallup deployment", "Client success plans"],
-  "Rehan Bhiwandiwalla": ["Solution design for Unilever"],
-  "Emily Nelsen": ["Pre-sales demos", "Solution proposals"],
-  "Patrick O'Brien": ["Technical discovery calls"],
-  "Adriana Jimenez": ["Proof-of-concept scoping"],
-  "Alexander Dang": ["Compute capacity planning", "Data pipeline monitoring"],
-  "E.J. Labaria III": ["GTM candidate sourcing", "Offer letters"],
-  "Christopher P.": ["Simulation API improvements"],
-  "Zicheng Zhen": ["Agent evaluation tooling"],
-  "Quan Nguyen": ["Client dashboard features"],
-  "Antonio Serrano": ["Java SDK for client integrations"],
-  "Mike White": ["Core platform architecture", "Engineering onboarding docs"],
-  "Natasha Tenggoro": ["Product design reviews", "Brand refresh"]
+  "Josh Gao": ["Q4 board meeting prep", "Frontier lab data reviews", "Hardware factory visit"],
+  "Duy Nguyen": ["NYC office build-out", "Capture operations capacity", "First commercial robot deployment"],
+  "Jason Chong": ["Capture rig v2 sign-off", "Engineering hiring plan"],
+  "Mogen Cheng": ["Data Tools roadmap", "Operator app quests"],
+  "Deployment Lead": ["First commercial deployment site plan", "Integration checklist v2"],
+  "Deployment Engineer": ["Robot post-training runs for a lab partner", "Weekly deployment status report"],
+  "Partner Operations Manager": ["Onboard new capture partners", "Partner payouts process"],
+  "Growth Lead": ["CoRL recap and Series B film cut-downs", "Operator app sign-up funnel"],
+  "Growth Marketing Associate": ["Humanoids Summit booth materials", "November newsletter"],
+  "People Operations Lead": ["Onboarding for three NYC hires", "Benefits enrollment reminders"],
+  "Technical Recruiter": ["Research engineer pipeline", "CoRL candidate follow-ups"],
+  "Evals Lead": ["Weekly hand-pose accuracy report", "Eval suite for a frontier lab"],
+  "Research Engineer, RL Env": ["RL environment for manipulation tasks"],
+  "Research Engineer, World Models": ["World model training on EgoVerse data"],
+  "Eric Lok": ["Capture batch for a frontier lab", "Operator quality reviews"],
+  "Capture Operations Lead": ["Home and commercial capture sites", "Rig shipments from Shenzhen"],
+  "Operator Network Manager": ["Higher-tier operator recruiting", "Daily quest schedule"],
+  "Data QA Lead": ["Labeling QA for the latest batch", "Sensor alignment spot checks"],
+  "Chief of Staff": ["Q4 board deck draft", "November investor update", "Founder travel for December"],
+  "Data Partnerships Lead": ["Frontier lab renewals", "Enterprise data program proposals"],
+  "Partnerships Lead (Supply)": ["New capture environments", "Supply partner contracts"],
+  "Strategic Finance Manager": ["Deal desk pricing review", "Series B budget plan"],
+  "Kevin Hu": ["Capture pipeline reliability", "On-call rotation"],
+  "Anthony Tat": ["Data Tools inference APIs"],
+  "Data Platform Engineer": ["Dataset query performance"],
+  "Motion Tracking Engineer": ["Sub-centimeter hand-pose tracking"],
+  "3D Reconstruction Engineer": ["Scene reconstruction for in-the-wild data"],
+  "Tactile Gloves Lead": ["Tactile glove prototype v2"],
+  "Hardware Special Projects Lead": ["Multi-sensor rig for commercial sites"],
+  "Edge ML Engineer": ["On-device capture models"],
+  "Data Tools PM": ["Data Tools roadmap", "Customer feedback roundup"],
+  "Product Designer": ["Operator app redesign", "Data Tools dashboards"]
 };
 
 export function teamMemberPeople() {
@@ -308,11 +156,11 @@ function seedTasks() {
 
 // Key milestones for the week: one per department, all due Friday of the current week.
 export const WEEKLY_MILESTONES = [
-  ['deployments', 'CVS onsite plan signed off'],
-  ['marketing', "Quirk's LA booth materials approved"],
-  ['hr', 'Chief of Staff final-round interviews scheduled'],
-  ['evals', 'Weekly eval report shared with clients'],
-  ['consumer', 'Suntory research findings delivered'],
+  ['deployments', 'First commercial deployment site plan signed off'],
+  ['marketing', 'Humanoids Summit booth materials approved'],
+  ['hr', 'Offer letters out for three NYC engineering hires'],
+  ['evals', 'Weekly hand-pose accuracy report shared with lab partners'],
+  ['consumer', 'Next capture batch delivered to a frontier lab'],
   ['ceo', 'Q4 board deck draft sent for review'],
   ['revops', 'Target Accounts and Lead Lists updated for the pipeline review'],
 ];
@@ -365,12 +213,12 @@ function seedMetrics() {
 
 export const OKR_DEPARTMENTS = [
   { key: 'deployments', label: 'Deployments' },
-  { key: 'marketing', label: 'Marketing' },
-  { key: 'hr', label: 'HR' },
-  { key: 'evals', label: 'Evals' },
-  { key: 'consumer', label: 'Consumer' },
+  { key: 'marketing', label: 'Growth' },
+  { key: 'hr', label: 'People' },
+  { key: 'evals', label: 'Research & Evals' },
+  { key: 'consumer', label: 'Data Operations' },
   { key: 'ceo', label: 'CEO Office' },
-  { key: 'revops', label: 'Revenue Operations' },
+  { key: 'revops', label: 'Partnerships & Deal Desk' },
 ];
 
 // A starter objective for a department column.
@@ -415,12 +263,12 @@ export const TOOL_ACCESS_NOTE = [
 const TOOL_ACCESS = [
   ['Google Workspace', 'Set up by the admin on day one. Sign in with your work email.', 'Chief of Staff', 'Email, calendar, Drive and Docs. Sign-in for most other tools.'],
   ['Slack', 'Invite sent to your work email on day one.', 'Chief of Staff', 'Team chat, #tool-access requests and roadmap alerts.'],
-  ['HubSpot', 'Request in #tool-access. Seats are limited, so say which team you are on.', 'CEO EA', 'CRM for accounts, deals, sequences and event follow-ups.'],
-  ['Ashby', 'Request in #tool-access. Interviewers get a free interviewer seat.', 'HR', 'Applicant tracking, interview scheduling and scorecards.'],
+  ['HubSpot', 'Request in #tool-access. Seats are limited, so say which team you are on.', 'Office Manager', 'CRM for accounts, deals, sequences and event follow-ups.'],
+  ['Ashby', 'Request in #tool-access. Interviewers get a free interviewer seat.', 'People Operations', 'Applicant tracking, interview scheduling and scorecards.'],
   ['Apollo', 'Request in #tool-access. Credits are shared, so check before bulk exports.', 'Chief of Staff', 'Finding contact details for leads and candidates.'],
-  ['Juicebox', 'Request in #tool-access. Recruiting team only.', 'HR', 'Searching for technical candidates across 30+ sources.'],
-  ['Claude', 'Request in #tool-access. Added to the team workspace.', 'CTO EA', 'Writing, research and the skills that connect our tools.'],
-  ['Granola', 'Install from granola.ai and sign in with Google.', 'CTO EA', 'Meeting notes that feed objectives on the GTM Roadmap.'],
+  ['Juicebox', 'Request in #tool-access. Recruiting team only.', 'People Operations', 'Searching for technical candidates across 30+ sources.'],
+  ['Claude', 'Request in #tool-access. Added to the team workspace.', 'Office Manager', 'Writing, research and the skills that connect our tools.'],
+  ['Granola', 'Install from granola.ai and sign in with Google.', 'Office Manager', 'Meeting notes that feed objectives on the GTM Roadmap.'],
 ];
 
 function toolAccessGuide() {
@@ -454,23 +302,23 @@ export function seedDocLibrary() {
         doc('tpl-investor-newsletter', 'Investor Newsletter Template', 'Monthly. Sections: highlights, lowlights, key metrics (revenue, pipeline, headcount), asks and next steps.'),
         doc('tpl-board-deck', 'Board Deck Template', 'Quarterly. Sections: summary, financials, pipeline and forecast, product updates, hiring, risks and decisions needed.'),
         doc('tpl-sales-deck-enterprise', 'Sales Deck Template: Enterprise', 'For enterprise buyers. Problem, how Mecka works, customer proof, pilot plan, pricing and next steps.'),
-        doc('tpl-sales-deck-consumer', 'Sales Deck Template: Consumer & Retail', 'Same structure as the enterprise deck, with consumer research use cases and retail case studies.'),
+        doc('tpl-sales-deck-consumer', 'Sales Deck Template: Robotics Labs', 'Same structure as the enterprise deck, for robotics and frontier model teams: dataset access, commissioned collection, evals and EgoVerse.'),
       ],
     },
     {
       id: 'docs-client-sops', title: 'Client SOPs',
       entries: [
         doc('sop-client-onboarding', 'Client Onboarding SOP', 'Steps from signed contract to kickoff: welcome email, kickoff call, success plan, owners on both sides and a 30/60/90-day check-in schedule.'),
-        doc('sop-client-setup', 'Client Data and Access Setup SOP', 'Getting data access, the security review, user accounts and the first test running, with an owner for each step.'),
+        doc('sop-client-setup', 'Data Program Setup SOP', 'From data spec to first delivery: task list, capture plan, operators and rigs, QA, delivery format and the first sample batch, with an owner for each step.'),
         doc('sop-client-qbr', 'Client QBR SOP', 'How to prepare and run quarterly business reviews: results so far, open issues, renewal and expansion.'),
       ],
     },
     {
       id: 'docs-team-onboarding', title: 'Team Onboarding',
       entries: [
-        doc('onb-deployments', 'Deployment Team Onboarding', 'First two weeks: product training, shadowing live client deployments, tool access and the deployment checklist.'),
-        doc('onb-consumer', 'Consumer Team Onboarding', 'First two weeks: consumer research use cases, key accounts, research methods and how we report results.'),
-        doc('onb-hr', 'HR Team Onboarding', 'First two weeks: hiring process in Ashby, benefits and payroll setup, policies and the new-hire checklist.'),
+        doc('onb-deployments', 'Deployment Team Onboarding', 'First two weeks: hardware and Data Tools training, shadowing live robot deployments, tool access and the deployment checklist.'),
+        doc('onb-consumer', 'Data Operations Onboarding', 'First two weeks: capture rigs and the operator app, the operator network, QA standards and safety at capture sites.'),
+        doc('onb-hr', 'People Team Onboarding', 'First two weeks: hiring process in Ashby, benefits and payroll setup, policies and the new-hire checklist.'),
       ],
     },
   ];
@@ -524,18 +372,19 @@ export const SCHOOL_FIELDS = [
   { key: 'orgs', label: 'Notable Organizations', multiline: true },
 ];
 
-// Top schools for deep learning, AI, ML and simulation.
+// Top schools for robotics, robot learning and computer vision. The first five are EgoVerse research partners.
 const TOP_SCHOOLS = [
-  ['Stanford University', 'Stanford, CA', 'Deep learning, NLP, human-centered AI, generative agents and social simulation', 'Stanford AI Lab (SAIL), Stanford HAI, Center for Research on Foundation Models (CRFM), Stanford HCI Group', 'Stanford ACM, Stanford AI Alignment, TreeHacks'],
-  ['MIT', 'Cambridge, MA', 'Machine learning, robotics, computational science and simulation', 'CSAIL, MIT Media Lab, MIT-IBM Watson AI Lab, Center for Computational Science and Engineering', 'MIT Machine Intelligence Community, HackMIT'],
-  ['Carnegie Mellon University', 'Pittsburgh, PA', 'Machine learning, robotics, language technologies', 'Machine Learning Department, Robotics Institute, Language Technologies Institute', 'ScottyLabs (runs TartanHacks)'],
-  ['UC Berkeley', 'Berkeley, CA', 'Deep learning, reinforcement learning, AI safety', 'Berkeley AI Research (BAIR), Center for Human-Compatible AI (CHAI), Sky Computing Lab', 'Machine Learning at Berkeley, Cal Hacks'],
-  ['University of Toronto', 'Toronto, ON', 'Deep learning, computer vision, graphics and physics simulation', 'Vector Institute, Dynamic Graphics Project', 'University of Toronto Machine Intelligence Student Team (UTMIST)'],
-  ['Université de Montréal and McGill University', 'Montreal, QC', 'Deep learning, generative models, reinforcement learning', 'Mila (Quebec AI Institute), IVADO, McGill Centre for Intelligent Machines', 'McGill AI Society, McHacks'],
-  ['University of Waterloo', 'Waterloo, ON', 'Machine learning, AI engineering, systems', 'Waterloo.AI (Waterloo Artificial Intelligence Institute)', 'Hack the North, Socratica, Waterloo Data Science Club'],
-  ['University of Washington', 'Seattle, WA', 'NLP, computer vision, human-computer interaction', 'Paul G. Allen School of Computer Science & Engineering, UW NLP, Allen Institute for AI (AI2, nearby)', 'DubHacks'],
-  ['Princeton University', 'Princeton, NJ', 'Machine learning theory, NLP, computational social science', 'Princeton Language and Intelligence (PLI), Princeton Visual AI Lab', 'HackPrinceton'],
-  ['University of Oxford', 'Oxford, UK', 'Machine learning theory, Bayesian ML, computer vision', 'Oxford Applied and Theoretical Machine Learning Group (OATML), Visual Geometry Group (VGG)', 'Oxford AI Society (OxAI)'],
+  ['Georgia Tech', 'Atlanta, GA', 'Robot learning, embodied AI, EgoVerse research partner', 'Institute for Robotics and Intelligent Machines (IRIM); Mecka research adviser Animesh Garg teaches here', 'HackGT, RoboJackets'],
+  ['Stanford University', 'Stanford, CA', 'Robot learning, computer vision, embodied AI, EgoVerse research partner', 'Stanford AI Lab (SAIL), Stanford Vision and Learning Lab, Stanford HAI', 'Stanford Robotics Club, TreeHacks'],
+  ['MIT', 'Cambridge, MA', 'Robotics, manipulation, computer vision, EgoVerse research partner', 'CSAIL, MIT Media Lab', 'MIT Robotics Team, HackMIT'],
+  ['UC San Diego', 'San Diego, CA', 'Robotics, computer vision, EgoVerse research partner', 'Contextual Robotics Institute', 'SD Hacks'],
+  ['ETH Zürich', 'Zürich, Switzerland', 'Legged robots, robot learning, EgoVerse research partner', 'Robotic Systems Lab, ETH AI Center', 'HackZurich (held in Zürich)'],
+  ['Carnegie Mellon University', 'Pittsburgh, PA', 'Robotics, machine learning, computer vision', 'Robotics Institute, Machine Learning Department', 'ScottyLabs (runs TartanHacks)'],
+  ['UC Berkeley', 'Berkeley, CA', 'Robot learning, reinforcement learning, deep learning', 'Berkeley AI Research (BAIR)', 'Machine Learning at Berkeley, Cal Hacks'],
+  ['Columbia University', 'New York, NY', 'Robotics and computer vision, close to the NYC office', 'Columbia Engineering robotics labs, including the ROAM Lab and Creative Machines Lab', 'Columbia DevFest'],
+  ['New York University', 'New York, NY', 'Robot learning, deep learning, close to the NYC office', 'CILVR Lab, NYU Center for Data Science', 'HackNYU'],
+  ['University of Toronto', 'Toronto, ON', 'Deep learning, computer vision, robotics; Mecka started in Toronto', 'Vector Institute, UofT Robotics Institute', 'University of Toronto Machine Intelligence Student Team (UTMIST)'],
+  ['University of Waterloo', 'Waterloo, ON', 'Mechatronics, machine learning, systems', 'Waterloo.AI (Waterloo Artificial Intelligence Institute)', 'Hack the North, Waterloo Robotics Team (WATonomous)'],
 ];
 
 export function schoolRows() {
@@ -554,57 +403,32 @@ export const CONFERENCE_FIELDS = [
 ];
 
 const CONFERENCES = [
-  ['RAISE Summit 2026', 'Simile', 'Europe', 'Jul 8–9, 2026', 'Carrousel du Louvre, Paris, and online', 'Joon Sung Park, Simile’s CEO and co-founder, is listed as a speaker. The speaker page doesn’t name his session.', 'https://tickets.raisesummit.com/2026/speaker/2388172/joon-sung-park'],
-  ['Disney Accelerator 2026', 'Simile', '', '2026', '', 'Simile is one of the five startup companies selected for the 12th annual Disney Accelerator program in 2026.', 'https://www.kentertechhub.com/disney-accel-2026-en/'],
-  ['TEDAI 2023', 'Before Simile (Joon’s research years)', '', '2023', '', 'Joon gave a talk called “A Simulation of Human Reality, Powered by AI” while he was a Stanford PhD student.', 'https://ted-ai-new-website-git-newpage-0611-xy-ai.vercel.app/speakers/joon-sung-park'],
-  ['UIST 2023', 'Before Simile (Joon’s research years)', '', '2023', '', 'The Generative Agents paper won a Best Paper Award. UIST is an academic human-computer interaction conference.', ''],
-  ['ICLR 2027', 'Deep learning and AI research', 'United States', 'Apr 26–30, 2027', 'Moscone Center, San Francisco, CA', 'One of the top three machine learning conferences.', 'https://www.beri.net/events/iclr-2027'],
-  ['CVPR 2027', 'Deep learning and AI research', 'United States', 'Jun 20–24, 2027', 'Seattle, WA', 'The main computer vision conference.', 'https://www.thecvf.com/?p=137'],
-  ['WACV 2027', 'Deep learning and AI research', 'United States', 'Jan 4–8, 2027', 'Orlando, FL', 'A smaller computer vision conference.', 'https://www.thecvf.com/?p=137'],
-  ['NeurIPS 2026 (Atlanta)', 'Deep learning and AI research', 'United States', 'Dec 8–13, 2026', 'Atlanta, GA', 'NeurIPS is split across three cities this year: Sydney (Dec 6–12), Atlanta and Paris. Atlanta is the North American site.', 'https://aiweekly.co/node/12069'],
-  ['NVIDIA GTC 2027', 'Simulation and digital twins', 'United States', 'Mar 14–18, 2027', 'San Jose McEnery Convention Center and venues across San Jose, CA', 'The biggest single event that covers AI, simulation (Omniverse), robotics and digital twins together.', 'https://www.nvidia.com/en-zz/gtc/faq/'],
-  ['I/ITSEC 2026', 'Simulation and digital twins', 'United States', 'Nov 30–Dec 4, 2026', 'Orlando, FL', 'Known as the world’s largest event for modeling, simulation and training. It leans toward defense.', 'https://www.tradefairdates.com/IITSEC-M2078/Orlando.html'],
-  ['Digital Twin Summit (North America)', 'Simulation and digital twins', 'United States', 'Aug 19, 2026', 'Denver, CO', 'The 2026 edition was on Aug 19 in Denver. Expect a similar summer date in 2027.', 'https://community.esri.com/t5/digital-twin-events/eb-p/digital-twin-events'],
-  ['AAAI 2027', 'Deep learning and AI research', 'Canada', 'Feb 16–23, 2027', 'Palais des congrès, Montréal, QC', 'A major AI research conference.', 'https://trybibby.com/conference-deadlines/aaai-2027'],
-  ['Upper Bound 2027', 'AI research and business', 'Canada', 'May 18–21, 2027', 'Edmonton Convention Centre, Edmonton, AB', 'Run by Amii. It mixes AI research with business adoption.', 'https://www.amii.ca/events/upper-bound-2027'],
-  ['ALL IN 2027', 'AI industry', 'Canada', 'Sep 22–23, 2027', 'Palais des congrès, Montréal, QC', 'Canada’s largest AI conference, organized by Scale AI with Mila.', 'https://www.beri.net/events/all-in-2027'],
-  ['ICASSP 2027', 'Speech and signal processing', 'Canada', 'May 16–21, 2027', 'Toronto, ON', 'The main conference for signal processing and speech AI.', 'https://www.opencurious.com/ai-conference-deadlines/icml-2027'],
-  ['NeurIPS 2026 (Paris)', 'Deep learning and AI research', 'Europe', 'Dec 9–13, 2026', 'Paris, France', 'The European site of NeurIPS this year.', 'https://aiweekly.co/node/12069'],
-  ['Winter Simulation Conference 2026', 'Simulation and digital twins', 'Europe', 'Dec 6–9, 2026', 'Glasgow, UK', 'The top academic simulation conference. It’s usually held in the US, so a European location is unusual.', 'https://www.informs.org/Meetings-Conferences/Community-Conferences-Calendar/(cc_year)/2026/(cc_month)/12'],
-  ['Hannover Messe 2027', 'Simulation and digital twins', 'Europe', 'Apr 5–8, 2027', 'Hannover, Germany', 'The main event for industrial AI and digital twins, with a strong focus on industrial IoT.', 'https://www.hannovermesse.de/en/for-visitors/opening-hours/'],
-  ['Digital Twins and Applications Europe 2027 (IET)', 'Simulation and digital twins', 'Europe', 'Jun 8–9, 2027', 'Madrid, Spain', 'Covers energy, manufacturing and smart cities. Paper submissions are due Jan 30, 2027.', 'https://digitaltwins.theiet.org/dta-europe-2027'],
-  ['EUROSIM', 'Simulation and digital twins', 'Europe', '2026 edition held', 'Genova, Italy', 'The conference of the Federation of European Simulation Societies. The 2026 edition was in Genova.', 'https://easychair.org/cfp/topic?tid=17638670'],
-  ['IEEE Digital Twin Conference', 'Simulation and digital twins', 'Europe', 'Sep 7–11, 2026', 'Rende, Italy', 'The 2026 edition was in Rende.', 'https://swc-ieee-2026.github.io/digitaltwin'],
+  ['Training Data podcast (Sequoia)', 'Mecka', 'United States', 'Oct 20, 2026', 'Online (YouTube and podcast)', 'Josh Gao, Mecka’s CEO and co-founder, talked with Sequoia’s Sonya Huang and Pat Grady about how Mecka sensorizes people to collect robot training data.', 'https://sequoiacap.com/podcast/inside-the-robot-data-factory-how-mecka-sensorizes-humans-to-train-robots'],
+  ['EgoVerse research release', 'Mecka', '', 'Apr 2026', 'Online (arXiv 2604.07607)', 'Human-to-robot transfer study with Georgia Tech, Stanford, UC San Diego, ETH Zürich, MIT and Meta. Good material for talks and recruiting at research conferences.', 'https://arxiv.org/abs/2604.07607'],
+  ['CoRL 2026', 'Robot learning research', 'United States', 'Nov 9–12, 2026', 'JW Marriott, Austin, TX', 'The Conference on Robot Learning, the closest research conference to what Mecka does.', 'https://2026.corl.org/'],
+  ['Humanoids Summit Silicon Valley 2026', 'Robotics industry', 'United States', 'Dec 1–2, 2026', 'San Mateo County Event Center, San Mateo, CA', 'Industry event for teams building humanoid robots, a core buyer group for Mecka’s data.', 'https://humanoidssummit.com/silicon-valley-2026'],
+  ['NeurIPS 2026 (Atlanta)', 'Deep learning and AI research', 'United States', 'Dec 8–13, 2026', 'Atlanta, GA', 'NeurIPS is split across three cities this year: Sydney (Dec 6–12), Atlanta and Paris. Atlanta is the North American site, and Georgia Tech is a research partner.', 'https://neurips.cc/Conferences/2026'],
+  ['NeurIPS 2026 (Paris)', 'Deep learning and AI research', 'Europe', 'Dec 9–13, 2026', 'Paris, France', 'The European site of NeurIPS this year.', 'https://neurips.cc/Conferences/2026'],
+  ['NVIDIA GTC 2027', 'Robotics and physical AI', 'United States', 'Mar 14–18, 2027', 'San Jose McEnery Convention Center and venues across San Jose, CA', 'NVIDIA’s main conference, with a large physical AI and robotics track. NVIDIA invested in Mecka’s Series B.', 'https://www.nvidia.com/gtc/'],
+  ['ICLR 2027', 'Deep learning and AI research', 'United States', 'Apr 26–30, 2027', 'Moscone Center, San Francisco, CA', 'One of the top three machine learning conferences.', 'https://iclr.cc/Conferences/2027'],
+  ['Automate 2027', 'Robotics industry', 'United States', 'May 10–13, 2027', 'Las Vegas Convention Center, Las Vegas, NV', 'A3’s robotics and automation trade show, the largest in North America. Good for meeting enterprise buyers.', 'https://www.automateshow.com/'],
+  ['ICRA 2027', 'Robotics research', 'Asia', 'May 24–28, 2027', 'COEX, Seoul, South Korea', 'The IEEE International Conference on Robotics and Automation, the largest robotics research conference.', 'https://2027.ieee-icra.org/'],
+  ['CVPR 2027', 'Computer vision research', 'United States', 'Jun 20–24, 2027', 'Seattle, WA', 'The main computer vision conference. Hand-pose tracking and 3D reconstruction are core to Mecka’s data.', 'https://cvpr.thecvf.com/'],
+  ['RSS 2027', 'Robotics research', 'Europe', 'Jul 6–11, 2027', 'Athens, Greece', 'Robotics: Science and Systems, a selective robotics research conference.', 'https://roboticsconference.org/'],
+  ['Hannover Messe 2027', 'Robotics industry', 'Europe', 'Apr 5–8, 2027', 'Hannover, Germany', 'The main trade fair for industrial automation, a likely buyer base for enterprise robot deployments.', 'https://www.hannovermesse.de/'],
+  ['ALL IN 2027', 'AI industry', 'Canada', 'Sep 22–23, 2027', 'Palais des congrès, Montréal, QC', 'Canada’s largest AI conference, organized by Scale AI with Mila. Most of Mecka’s founding team is Canadian.', 'https://www.scaleai.ca/'],
 ];
 
-// Corrections: missing region, dates and location, and official event sites instead of third-party pages.
-export const CONFERENCE_FIXES = {
-  'Disney Accelerator 2026': { details: 'Simile is one of the five startup companies selected for the 12th annual Disney Accelerator program in 2026.', region: 'United States', dates: 'Nov 3, 2026', location: 'Demo Day at Walt Disney Studios, Burbank, CA', link: 'https://thewaltdisneycompany.com/news/accelerator-2026-participants/' },
-  'TEDAI 2023': { region: 'United States', dates: 'Oct 17–18, 2023', location: 'San Francisco, CA', link: 'https://tedai-sanfrancisco.ted.com/' },
-  'UIST 2023': { region: 'United States', dates: 'Oct 29–Nov 1, 2023', location: 'San Francisco, CA', link: 'https://uist.acm.org/2023/' },
-  'ICLR 2027': { link: 'https://iclr.cc/Conferences/2027' },
-  'CVPR 2027': { link: 'https://cvpr.thecvf.com/' },
-  'WACV 2027': { link: 'https://wacv.thecvf.com/' },
-  'NeurIPS 2026 (Atlanta)': { link: 'https://neurips.cc/Conferences/2026' },
-  'NeurIPS 2026 (Paris)': { link: 'https://neurips.cc/Conferences/2026' },
-  'NVIDIA GTC 2027': { link: 'https://www.nvidia.com/gtc/' },
-  'I/ITSEC 2026': { link: 'https://www.iitsec.org/' },
-  'AAAI 2027': { link: 'https://aaai.org/conference/aaai/aaai-27/' },
-  'ALL IN 2027': { link: 'https://www.scaleai.ca/' },
-  'ICASSP 2027': { link: 'https://2027.ieeeicassp.org/' },
-  'Winter Simulation Conference 2026': { link: 'https://www.wintersim.org/' },
-  EUROSIM: { event: 'EUROSIM 2026', dates: 'Sep 21–23, 2026', location: 'Grand Hotel Savoia, Genova, Italy', details: 'The 12th congress of the Federation of European Simulation Societies, held with I3M 2026.', link: 'https://www.msc-les.org/eurosim2026/' },
-};
+// Corrections layered on top of the rows above. None needed yet.
+export const CONFERENCE_FIXES = {};
 
-// Event Attendance is split into Simile's past appearances, upcoming events and past events.
+// Event Attendance is split into Mecka's past appearances and upcoming events.
 export const CONFERENCE_GROUPS = [
-  { key: 'past', label: 'Simile’s Past Appearances' },
+  { key: 'past', label: 'Mecka’s Past Appearances' },
   { key: 'upcoming', label: 'Upcoming' },
-  { key: 'past-events', label: 'Past Events (Next Edition Not Announced)' },
 ];
 const CONFERENCE_GROUP_OF = {
-  'RAISE Summit 2026': 'past', 'Disney Accelerator 2026': 'past', 'TEDAI 2023': 'past', 'UIST 2023': 'past',
-  'Digital Twin Summit (North America)': 'past-events', EUROSIM: 'past-events', 'EUROSIM 2026': 'past-events', 'IEEE Digital Twin Conference': 'past-events',
+  'Training Data podcast (Sequoia)': 'past', 'EgoVerse research release': 'past',
 };
 export function conferenceGroupOf(event) {
   return CONFERENCE_GROUP_OF[event] || 'upcoming';
@@ -642,27 +466,27 @@ export const EVENT_PHASES = [
 ];
 
 // Owners used on event checklists, alongside the team's names.
-export const EVENT_ROLES = ['COO EA', 'CTO EA', 'Chief of Staff'];
+export const EVENT_ROLES = ['Office Manager', 'People Operations', 'Chief of Staff'];
 
 // One checklist per event type. Each item is [text, owner, done].
 const EVENT_CHECKLISTS = {
   'Executive Customer Dinner': {
     pre: [
-      ['Guest list with RSVPs tracked', 'COO EA', true],
+      ['Guest list with RSVPs tracked', 'Office Manager', true],
       ['Bio for each guest', 'Chief of Staff', true],
-      ['Private room booked', 'COO EA', true],
-      ['Menu confirmed with the restaurant', 'COO EA', false],
-      ['Dietary needs collected from every guest', 'COO EA', false],
+      ['Private room booked', 'Office Manager', true],
+      ['Menu confirmed with the restaurant', 'Office Manager', false],
+      ['Dietary needs collected from every guest', 'Office Manager', false],
       ['Seating plan', 'Chief of Staff', false],
       ['Talking points for the host', 'Chief of Staff', false],
     ],
     during: [
-      ['Place cards match the seating plan', 'COO EA', false],
+      ['Place cards match the seating plan', 'Office Manager', false],
       ['Host has talking points and guest bios on hand', 'Chief of Staff', false],
       ['Notes on each guest conversation for follow-up', 'Chief of Staff', false],
     ],
     after: [
-      ['Handwritten thank-you notes sent within 24 hours', 'COO EA', false],
+      ['Handwritten thank-you notes sent within 24 hours', 'Office Manager', false],
       ['Follow-ups logged in HubSpot', 'Chief of Staff', false],
     ],
   },
@@ -670,29 +494,29 @@ const EVENT_CHECKLISTS = {
     pre: [
       ['Agenda', 'Chief of Staff', true],
       ['Speakers confirmed', 'Chief of Staff', false],
-      ['Awards chosen and ordered', 'COO EA', false],
-      ['Travel and hotels booked for the whole team', 'CTO EA', false],
+      ['Awards chosen and ordered', 'Office Manager', false],
+      ['Travel and hotels booked for the whole team', 'People Operations', false],
       ['Feedback survey drafted', 'Chief of Staff', false],
     ],
     during: [
       ['Run-of-show and speaker timing', 'Chief of Staff', false],
-      ['Awards presented', 'COO EA', false],
+      ['Awards presented', 'Office Manager', false],
     ],
     after: [
       ['Feedback survey sent to everyone', 'Chief of Staff', false],
       ['Survey results shared with leadership', 'Chief of Staff', false],
-      ['Travel expenses reconciled', 'CTO EA', false],
+      ['Travel expenses reconciled', 'People Operations', false],
     ],
   },
   'GTM Offsite': {
     pre: [
       ['Pre-reads sent a week ahead', 'Chief of Staff', true],
       ['How each session will run: goal, owner and format', 'Chief of Staff', false],
-      ['Venue, travel and rooms booked', 'COO EA', true],
+      ['Venue, travel and rooms booked', 'Office Manager', true],
     ],
     during: [
       ['Decisions log kept for every session', 'Chief of Staff', false],
-      ['Owner and deadline captured for each decision', 'CTO EA', false],
+      ['Owner and deadline captured for each decision', 'People Operations', false],
     ],
     after: [
       ['Slide deck of outcomes sent within 48 hours', 'Chief of Staff', false],
@@ -702,32 +526,32 @@ const EVENT_CHECKLISTS = {
   'Industry Event': {
     pre: [
       ['Lead list of target accounts', 'Chief of Staff', true],
-      ['Booth presentation and materials', 'COO EA', false],
-      ['Booth staffing, scripts and run-of-show', 'CTO EA', false],
+      ['Booth presentation and materials', 'Office Manager', false],
+      ['Booth staffing, scripts and run-of-show', 'People Operations', false],
     ],
     during: [
-      ['Wi-Fi and connection confirmed with the event organizer', 'CTO EA', false],
+      ['Wi-Fi and connection confirmed with the event organizer', 'People Operations', false],
       ['Lead list on hand', 'Chief of Staff', false],
-      ['Calendar open for call bookings', 'COO EA', false],
+      ['Calendar open for call bookings', 'Office Manager', false],
       ['HubSpot ready to track every conversation', 'Chief of Staff', false],
     ],
     after: [
       ['Follow-ups on every conversation', 'Chief of Staff', false],
-      ['Marketing recap of our attendance', 'COO EA', false],
+      ['Marketing recap of our attendance', 'Office Manager', false],
     ],
   },
   Other: {
-    pre: [['Goals and guest list', 'Chief of Staff', false], ['Venue and logistics booked', 'COO EA', false]],
+    pre: [['Goals and guest list', 'Chief of Staff', false], ['Venue and logistics booked', 'Office Manager', false]],
     during: [['Run-of-show', 'Chief of Staff', false]],
     after: [['Follow-ups and recap', 'Chief of Staff', false]],
   },
 };
 
 // The checklist for a new event of this type. Starter events keep their sample owners and done marks.
-// The COO EA owns about three in four items; every fourth item keeps its specialist owner.
+// The Office Manager owns about three in four items; every fourth item keeps its specialist owner.
 export function eventOwnerAt(n, listed) {
-  if (n % 4 !== 3) return 'COO EA';
-  return listed && listed !== 'COO EA' ? listed : n % 8 === 3 ? 'Chief of Staff' : 'CTO EA';
+  if (n % 4 !== 3) return 'Office Manager';
+  return listed && listed !== 'Office Manager' ? listed : n % 8 === 3 ? 'Chief of Staff' : 'People Operations';
 }
 
 export function eventChecklist(eventId, type, { sample = false } = {}) {
@@ -742,17 +566,17 @@ export function eventChecklist(eventId, type, { sample = false } = {}) {
   return out;
 }
 
-export const QUIRKS_LA = { name: "The Quirk's Event – Los Angeles", description: "Booth at Quirk's, the market research and consumer insights conference, to meet insights leaders at target accounts and book follow-up calls.", date: '2027-02-24', location: 'Los Angeles, CA', link: 'https://www.quirks.com/events/the-quirks-event-los-angeles-2027' };
+export const QUIRKS_LA = { name: 'Humanoids Summit Silicon Valley 2026', description: 'Booth at the Humanoids Summit to meet teams building humanoid robots, show EgoVerse and our capture data, and book follow-up calls.', date: '2026-12-01', location: 'San Mateo, CA', link: 'https://humanoidssummit.com/silicon-valley-2026' };
 
 // Placeholder events so the calendar shows a fuller season. Replace them with real ones.
 export const PLACEHOLDER_EVENTS = [
-  ['evt-ph-cab-lunch', 'Customer Advisory Board Lunch', 'Executive Customer Dinner', 'Lunch with eight customer leaders to review the roadmap and hear feedback.', '2026-11-19', 'San Francisco, CA', 'Confirmed'],
+  ['evt-ph-cab-lunch', 'Lab Partner Lunch', 'Executive Customer Dinner', 'Lunch with research leads from partner labs to review data needs and hear feedback.', '2026-11-19', 'New York, NY', 'Confirmed'],
   ['evt-ph-neurips', 'NeurIPS 2026 Meetups', 'Industry Event', 'Small meetups with researchers and recruiting leads around NeurIPS in Atlanta.', '2026-12-09', 'Atlanta, GA', 'Planning'],
   ['evt-ph-investor-dinner', 'Investor Holiday Dinner', 'Executive Customer Dinner', 'Year-end dinner with board members and lead investors.', '2026-12-10', 'New York, NY', 'Planning'],
-  ['evt-ph-holiday-party', 'Team Holiday Party', 'Other', 'End-of-year party for the whole team and partners.', '2026-12-17', 'San Francisco, CA', 'Planning'],
-  ['evt-ph-leadership-offsite', 'Leadership Planning Offsite', 'GTM Offsite', 'Two days for leadership to set H1 priorities, budgets and hiring.', '2027-01-28', 'Sonoma, CA', 'Idea'],
-  ['evt-ph-board-dinner', 'Q1 Board Meeting Dinner', 'Executive Customer Dinner', 'Dinner after the Q1 board meeting with directors and leadership.', '2027-02-11', 'San Francisco, CA', 'Idea'],
-  ['evt-ph-gtc', 'NVIDIA GTC 2027', 'Industry Event', 'Attend sessions on simulation and digital twins and meet target accounts.', '2027-03-15', 'San Jose, CA', 'Idea'],
+  ['evt-ph-holiday-party', 'Team Holiday Party', 'Other', 'End-of-year party for the whole team and partners at the NYC office.', '2026-12-17', 'New York, NY', 'Planning'],
+  ['evt-ph-leadership-offsite', 'Leadership Planning Offsite', 'GTM Offsite', 'Two days for leadership to set H1 priorities, budgets and hiring.', '2027-01-28', 'Hudson Valley, NY', 'Idea'],
+  ['evt-ph-board-dinner', 'Q1 Board Meeting Dinner', 'Executive Customer Dinner', 'Dinner after the Q1 board meeting with directors and leadership.', '2027-02-11', 'New York, NY', 'Idea'],
+  ['evt-ph-gtc', 'NVIDIA GTC 2027', 'Industry Event', 'Attend physical AI and robotics sessions and meet target accounts.', '2027-03-15', 'San Jose, CA', 'Idea'],
   ['evt-ph-enablement', 'Spring Sales Enablement Day', 'Sales Kickoff', 'One-day refresh on the pitch, new case studies and Q2 targets.', '2027-03-24', 'New York, NY', 'Idea'],
 ];
 
@@ -764,9 +588,9 @@ export function placeholderEvents() {
 
 function seedEvents() {
   return [
-    ['evt-gtm-offsite', 'Q1 GTM Offsite', 'GTM Offsite', 'Two-day offsite for sales, marketing and customer success to agree on 2027 targets, territories and plays.', '2027-01-14', 'Napa, CA', 'Planning'],
-    ['evt-sales-kickoff', '2027 Sales Kickoff', 'Sales Kickoff', 'Annual kickoff covering the product roadmap, the new pitch, enablement sessions and awards.', '2027-02-03', 'San Francisco, CA', 'Planning'],
-    ['evt-exec-dinner', 'NYC Executive Customer Dinner', 'Executive Customer Dinner', 'Private dinner for about 12 customer and prospect executives to build relationships and hear feedback.', '2026-12-03', 'New York, NY', 'Confirmed'],
+    ['evt-gtm-offsite', 'Q1 GTM Offsite', 'GTM Offsite', 'Two-day offsite for partnerships, growth and deployments to agree on 2027 targets, accounts and plays.', '2027-01-14', 'Hudson Valley, NY', 'Planning'],
+    ['evt-sales-kickoff', '2027 Sales Kickoff', 'Sales Kickoff', 'Annual kickoff covering the product roadmap, the new pitch, enablement sessions and awards.', '2027-02-03', 'New York, NY', 'Planning'],
+    ['evt-exec-dinner', 'NYC Executive Customer Dinner', 'Executive Customer Dinner', 'Private dinner for about 12 robotics lab and enterprise leaders to build relationships and hear feedback.', '2026-12-03', 'New York, NY', 'Confirmed'],
     ['evt-industry', QUIRKS_LA.name, 'Industry Event', QUIRKS_LA.description, QUIRKS_LA.date, QUIRKS_LA.location, 'Planning'],
     ...PLACEHOLDER_EVENTS,
   ].map(([id, name, type, description, date, location, status]) => {
@@ -776,7 +600,7 @@ function seedEvents() {
   });
 }
 
-export const LEADERS = ['Lainie Yallen', 'Eileen Smith', 'Julia Lauer', 'Danny Wymer', 'Madison Fox', 'Mihika Kapoor', 'Matan Amir', 'Joon Sung Park', 'Michael Bernstein'];
+export const LEADERS = ['Josh Gao', 'Duy Nguyen', 'Jason Chong', 'Mogen Cheng'];
 export const SCHEDULE_TYPES = [
   { key: 'customer', label: 'Customer meeting', color: '#ff7a66' },
   { key: 'onsite', label: 'Onsite', color: '#7fb8e6' },
@@ -784,101 +608,47 @@ export const SCHEDULE_TYPES = [
   { key: 'office', label: 'In office', color: '#7cc49a' },
 ];
 
-const SCHEDULE_CITIES = ['New York', 'Chicago', 'London', 'San Francisco', 'San Francisco', 'New York', 'Toronto', 'Boston', 'London', 'San Francisco',
-  'New York', 'Toronto', 'San Francisco', 'New York', 'Chicago', 'New York', 'San Francisco', 'Boston', 'London', 'Chicago',
-  'London', 'San Francisco', 'New York', 'Toronto', 'Toronto', 'Boston', 'Chicago', 'New York', 'San Francisco', 'London',
-  'Toronto', 'San Francisco', 'Chicago', 'Boston', 'Toronto', 'New York'];
-
 // Cities the leadership team works from, with the short code shown on the calendar.
 export const CITIES = [
-  { name: 'San Francisco', short: 'SF' },
   { name: 'New York', short: 'NYC' },
-  { name: 'Boston', short: 'BOS' },
-  { name: 'Chicago', short: 'CHI' },
+  { name: 'San Francisco', short: 'SF' },
   { name: 'Toronto', short: 'TOR' },
-  { name: 'London', short: 'LDN' },
+  { name: 'Austin', short: 'ATX' },
+  { name: 'Shenzhen', short: 'SZX' },
+];
+
+// [person, type, title, start, end, time, city]
+const SCHEDULE = [
+  ['Josh Gao', 'conference', 'CoRL 2026', '2026-11-09', '2026-11-11', '', 'Austin'],
+  ['Josh Gao', 'customer', 'Frontier lab data review', '2026-11-13', '2026-11-13', '10:00', 'San Francisco'],
+  ['Josh Gao', 'onsite', 'Hardware factory visit', '2026-11-17', '2026-11-19', '', 'Shenzhen'],
+  ['Josh Gao', 'office', 'In office', '2026-11-23', '2026-11-23', '', 'New York'],
+  ['Josh Gao', 'conference', 'Humanoids Summit', '2026-12-01', '2026-12-02', '', 'San Francisco'],
+  ['Duy Nguyen', 'office', 'In office', '2026-11-09', '2026-11-09', '', 'New York'],
+  ['Duy Nguyen', 'onsite', 'Capture site visit', '2026-11-12', '2026-11-13', '', 'Toronto'],
+  ['Duy Nguyen', 'customer', 'Enterprise deployment kickoff', '2026-11-18', '2026-11-18', '14:00', 'New York'],
+  ['Duy Nguyen', 'office', 'In office', '2026-11-24', '2026-11-24', '', 'New York'],
+  ['Duy Nguyen', 'onsite', 'Deployment site walkthrough', '2026-12-03', '2026-12-04', '', 'San Francisco'],
+  ['Jason Chong', 'conference', 'CoRL 2026', '2026-11-09', '2026-11-12', '', 'Austin'],
+  ['Jason Chong', 'office', 'In office', '2026-11-16', '2026-11-16', '', 'New York'],
+  ['Jason Chong', 'customer', 'Lab integration review', '2026-11-19', '2026-11-19', '11:00', 'San Francisco'],
+  ['Jason Chong', 'onsite', 'Capture rig QA', '2026-11-30', '2026-12-01', '', 'Toronto'],
+  ['Mogen Cheng', 'office', 'In office', '2026-11-10', '2026-11-10', '', 'New York'],
+  ['Mogen Cheng', 'customer', 'Data Tools demo', '2026-11-11', '2026-11-11', '15:00', 'New York'],
+  ['Mogen Cheng', 'onsite', 'Operator app testing', '2026-11-17', '2026-11-18', '', 'Toronto'],
+  ['Mogen Cheng', 'office', 'In office', '2026-11-23', '2026-11-23', '', 'New York'],
+  ['Mogen Cheng', 'conference', 'Humanoids Summit', '2026-12-01', '2026-12-02', '', 'San Francisco'],
 ];
 
 export function scheduleCityFor(index) {
-  return SCHEDULE_CITIES[index] || '';
+  return (SCHEDULE[index] || [])[6] || '';
 }
 
 export function seedLeadershipSchedule() {
-  return [
-    ['Lainie Yallen', 'customer', 'Customer QBR', '2026-11-10', '2026-11-10', '10:00'],
-    ['Eileen Smith', 'onsite', 'Client onsite', '2026-11-17', '2026-11-18', ''],
-    ['Julia Lauer', 'conference', 'Industry conference', '2026-11-12', '2026-11-13', ''],
-    ['Danny Wymer', 'office', 'In office', '2026-11-09', '2026-11-09', ''],
-    ['Madison Fox', 'customer', 'Client kickoff', '2026-11-11', '2026-11-11', '14:00'],
-    ['Mihika Kapoor', 'office', 'In office', '2026-11-16', '2026-11-16', ''],
-    ['Matan Amir', 'conference', 'Industry conference', '2026-11-19', '2026-11-20', ''],
-    ['Lainie Yallen', 'onsite', 'Client onsite', '2026-11-04', '2026-11-05', ''],
-    ['Lainie Yallen', 'conference', 'Industry conference', '2026-12-02', '2026-12-03', ''],
-    ['Lainie Yallen', 'office', 'In office', '2026-11-16', '2026-11-16', ''],
-    ['Eileen Smith', 'customer', 'Customer check-in', '2026-11-05', '2026-11-05', '11:00'],
-    ['Eileen Smith', 'conference', 'Industry conference', '2026-12-09', '2026-12-10', ''],
-    ['Eileen Smith', 'office', 'In office', '2026-11-10', '2026-11-10', ''],
-    ['Julia Lauer', 'customer', 'Renewal call', '2026-11-17', '2026-11-17', '13:00'],
-    ['Julia Lauer', 'onsite', 'Client onsite', '2026-12-01', '2026-12-02', ''],
-    ['Julia Lauer', 'office', 'In office', '2026-11-23', '2026-11-23', ''],
-    ['Danny Wymer', 'customer', 'Customer QBR', '2026-11-12', '2026-11-12', '15:00'],
-    ['Danny Wymer', 'onsite', 'Client onsite', '2026-11-24', '2026-11-25', ''],
-    ['Danny Wymer', 'conference', 'Industry conference', '2026-12-02', '2026-12-03', ''],
-    ['Madison Fox', 'onsite', 'Client onsite', '2026-11-18', '2026-11-19', ''],
-    ['Madison Fox', 'conference', 'Industry conference', '2026-11-12', '2026-11-13', ''],
-    ['Madison Fox', 'office', 'In office', '2026-11-03', '2026-11-03', ''],
-    ['Mihika Kapoor', 'customer', 'Prospect demo', '2026-11-09', '2026-11-09', '09:30'],
-    ['Mihika Kapoor', 'onsite', 'Client onsite', '2026-11-30', '2026-12-01', ''],
-    ['Mihika Kapoor', 'conference', 'Industry conference', '2026-12-09', '2026-12-10', ''],
-    ['Matan Amir', 'customer', 'Customer kickoff', '2026-11-23', '2026-11-23', '16:00'],
-    ['Matan Amir', 'onsite', 'Client onsite', '2026-11-04', '2026-11-05', ''],
-    ['Matan Amir', 'office', 'In office', '2026-11-11', '2026-11-11', ''],
-    ['Joon Sung Park', 'customer', 'Customer QBR', '2026-11-18', '2026-11-18', '10:30'],
-    ['Joon Sung Park', 'onsite', 'Client onsite', '2026-12-07', '2026-12-08', ''],
-    ['Joon Sung Park', 'conference', 'Industry conference', '2026-11-19', '2026-11-20', ''],
-    ['Joon Sung Park', 'office', 'In office', '2026-11-24', '2026-11-24', ''],
-    ['Michael Bernstein', 'customer', 'Prospect demo', '2026-11-24', '2026-11-24', '11:00'],
-    ['Michael Bernstein', 'onsite', 'Client onsite', '2026-11-10', '2026-11-11', ''],
-    ['Michael Bernstein', 'conference', 'Industry conference', '2026-12-09', '2026-12-10', ''],
-    ['Michael Bernstein', 'office', 'In office', '2026-11-04', '2026-11-04', ''],
-  ].map(([person, type, title, start, end, time], i) => ({ id: `sched-${i + 1}`, person, type, title, start, end, time, city: SCHEDULE_CITIES[i], notes: '' }));
+  return SCHEDULE.map(([person, type, title, start, end, time, city], i) => ({ id: `sched-${i + 1}`, person, type, title, start, end, time, city, notes: '' }));
 }
 
 const POTENTIAL_INVESTORS = [
-  {
-    "firm": "Index Ventures",
-    "link": "https://www.indexventures.com",
-    "industry": "AI, infrastructure, security, enterprise",
-    "stage": "Seed → Growth",
-    "fund": "Index Growth fund",
-    "fundSize": "$1.5B (2024) + $700M top-up",
-    "fundClosed": "Jul 2026",
-    "check": "Up to ~$50M+ at growth",
-    "partner": "Shardul Shah",
-    "role": "Partner; led Simile's $100M Series A",
-    "linkedin": "https://www.linkedin.com/in/shardul-shah-3589062/",
-    "linkedinStatus": "Verified",
-    "why": "Led Simile's Series A and joined the Series B.",
-    "relationship": "Existing investor",
-    "source": "https://www.everythingstartups.com/vc-funds/index-ventures"
-  },
-  {
-    "firm": "Greenoaks",
-    "link": "https://www.greenoakscap.com",
-    "industry": "Concentrated growth bets in AI, enterprise and fintech",
-    "stage": "Series B → Late",
-    "fund": "Greenoaks Capital Opportunities Fund VI",
-    "fundSize": "$2.5B",
-    "fundClosed": "Jul 2025",
-    "check": "Large, concentrated positions",
-    "partner": "Neil Mehta",
-    "role": "Founder & Managing Partner",
-    "linkedin": "https://www.linkedin.com/search/results/people/?keywords=Neil%20Mehta%20Greenoaks",
-    "linkedinStatus": "Search link (open and confirm the profile)",
-    "why": "Led Simile's $200M Series B; also backs Anthropic.",
-    "relationship": "Existing investor",
-    "source": "https://thesaasnews.com/news/simile-raises-200m-series-b"
-  },
   {
     "firm": "Sequoia Capital",
     "link": "https://sequoiacap.com",
@@ -943,7 +713,7 @@ const POTENTIAL_INVESTORS = [
     "role": "General Partner (healthcare, fintech, software)",
     "linkedin": "https://www.linkedin.com/search/results/people/?keywords=Kareem%20Zaki%20Thrive%20Capital",
     "linkedinStatus": "Search link (open and confirm the profile)",
-    "why": "New York firm; healthcare depth aligns with Simile's CVS Health relationship.",
+    "why": "New York firm, close to Mecka’s NYC headquarters.",
     "relationship": "Target",
     "source": "https://www.newcomer.co/p/big-wins-for-two-of-ventures-most"
   },
@@ -994,7 +764,7 @@ const POTENTIAL_INVESTORS = [
     "role": "Managing Director, AI & enterprise infrastructure",
     "linkedin": "https://www.linkedin.com/search/results/people/?keywords=Quentin%20Clark%20General%20Catalyst",
     "linkedinStatus": "Search link (open and confirm the profile)",
-    "why": "Former Dropbox/SAP CTO; health-assurance strategy fits Simile's healthcare buyers.",
+    "why": "Large multi-stage fund with room to lead or join a growth round.",
     "relationship": "Target",
     "source": "https://techcrunch.com/?p=3101491"
   },
@@ -1147,7 +917,7 @@ const POTENTIAL_INVESTORS = [
     "role": "General Partner, leads AI investing",
     "linkedin": "https://www.linkedin.com/search/results/people/?keywords=Jill%20Chase%20CapitalG",
     "linkedinStatus": "Search link (open and confirm the profile)",
-    "why": "Led Physical Intelligence and Isomorphic Labs; Google/DeepMind access.",
+    "why": "Led Physical Intelligence, a robot foundation model company, the kind of team that buys Mecka’s data; Google/DeepMind access.",
     "relationship": "Target",
     "source": "https://capitalg.com/team/jill-chase/"
   },
@@ -1198,7 +968,7 @@ const POTENTIAL_INVESTORS = [
     "role": "Co-Founder & Managing Partner; Vector Institute co-founder",
     "linkedin": "https://www.linkedin.com/search/results/people/?keywords=Jordan%20Jacobs%20Radical%20Ventures",
     "linkedinStatus": "Search link (open and confirm the profile)",
-    "why": "Deep-learning specialist (Cohere); Fei-Fei Li, an early Simile backer, is a Radical scientific partner.",
+    "why": "Toronto deep-learning specialist (Cohere); Mecka started in Toronto with a mostly Canadian team.",
     "relationship": "Target",
     "source": "https://betakit.com/radical-ventures-launches-canadas-largest-ai-fund-with-1-billion-usd-first-close/"
   }
@@ -1276,7 +1046,7 @@ export const BOARD_SECTIONS = [
   },
   {
     id: 'potential-investors', title: 'Potential Investors',
-    note: 'Growth-stage firms with an AI or deep tech focus that could lead or join our next round. Firms that already invest in us are listed under Investors instead.',
+    note: 'Growth-stage firms with an AI, robotics or deep tech focus that could lead or join our next round. Firms that already invest in us are listed under Investors instead.',
     addLabel: 'Add firm',
     fields: [
       { key: 'firm', label: 'Firm Name' },
@@ -1299,27 +1069,32 @@ export const BOARD_SECTIONS = [
   },
 ];
 
+// Mecka's investors by round: seed (Aug 2025, led by Neo), Series A ($60M in two tranches, led by Framework
+// Ventures, announced Jun 2026) and Series B ($60M, led by Sequoia, Oct 7, 2026).
 const CURRENT_INVESTORS = [
-  ['Index Ventures', 'Series A lead, Series B'],
-  ['Greenoaks', 'Series B lead'],
-  ['Bain Capital Ventures (BCV)', 'Series A, Series B'],
-  ['A*', 'Series A, Series B'],
-  ['Hanabi Capital', 'Series A, Series B'],
-  ['Factory', 'Series B'],
-  ['CVS Health Ventures', 'Series B'],
-  ['Definition', 'Series B'],
-  ['Itaú Ventures', 'Series B extension'],
-  ['Angel investor', ''],
+  ['Sequoia Capital', 'Series B lead'],
+  ['Framework Ventures', 'Series A lead, Series B'],
+  ['Neo', 'Seed lead, Series B'],
+  ['Kindred Ventures', 'Series A, Series B'],
+  ['Menlo Ventures', 'Series A'],
+  ['SV Angel', 'Seed, Series A'],
+  ['NVIDIA', 'Series B'],
+  ['M12 (Microsoft)', 'Series B'],
+  ['Qualcomm Ventures', 'Series B'],
+  ['Samsung', 'Series B'],
+  ['A-Star', 'Seed'],
+  ['Cade', 'Seed'],
+  ['Timeless', 'Seed'],
+  ['Offline VC', 'Seed'],
+  ['Angel investors', 'Series A, Series B'],
 ];
 
-// Who we work with at each firm, where we know it.
+// Who we work with at each firm, where it's public. Board seats aren't public, so those are left blank.
 export const INVESTOR_PARTNERS = {
-  'Index Ventures': {
-    partner: 'Shardul Shah', partnerLinkedin: 'https://www.linkedin.com/in/shardul-shah-3589062/', boardMember: 'Shardul Shah',
-    observer: 'Mark Xu', observerLinkedin: 'https://www.linkedin.com/in/marklxu/',
-  },
-  'Bain Capital Ventures (BCV)': { partner: 'Aaref Hilaly', partnerLinkedin: 'https://www.linkedin.com/in/aarefhilaly/' },
-  'Angel investor': { partner: 'Panos Madamopoulos-Moraris', partnerLinkedin: 'https://www.linkedin.com/in/panosmm/' },
+  'Sequoia Capital': { partner: 'Anas Biad, James Flynn' },
+  'Framework Ventures': { partner: 'Vance Spencer' },
+  Neo: { partner: 'Suzanne Xie' },
+  'Angel investors': { partner: 'Tony Xu, Frank Slootman, Milan Kovac, Christopher Payne, Jonathan Chadwick, Ted Xiao' },
 };
 
 export function currentInvestorRows() {
@@ -1334,7 +1109,7 @@ export function isCurrentInvestor(firm, current = CURRENT_INVESTORS.map(([f]) =>
 }
 
 // Who at Mecka owns the relationship. Only a couple are filled in so far.
-export const POTENTIAL_POCS = ['Lainie Yallen', 'Joon Sung Park'];
+export const POTENTIAL_POCS = ['Josh Gao', 'Duy Nguyen'];
 
 export function potentialInvestorRows() {
   return POTENTIAL_INVESTORS
@@ -1352,15 +1127,15 @@ export const CLEARANCE = [
 
 // [title, clearance, people with access]
 const DATA_ROOM = [
-  ['Overview deck', 'all', ['Lainie Yallen', 'Joon Sung Park', 'Shardul Shah', 'Mark Xu', 'Aaref Hilaly', 'Mike Volpi', 'Panos Madamopoulos-Moraris']],
-  ['Financial model', 'lead', ['Lainie Yallen', 'Joon Sung Park', 'Shardul Shah', 'Mark Xu', 'Aaref Hilaly']],
-  ['Cap table', 'lead', ['Lainie Yallen', 'Joon Sung Park', 'Shardul Shah', 'Mark Xu']],
-  ['Revenue report', 'all', ['Lainie Yallen', 'Noah Glazov', 'Shardul Shah', 'Mark Xu', 'Aaref Hilaly', 'Mike Volpi', 'Panos Madamopoulos-Moraris']],
-  ['Customer contracts', 'lead', ['Lainie Yallen', 'Rory Pan', 'Shardul Shah', 'Mark Xu']],
-  ['Product roadmap', 'all', ['Joon Sung Park', 'Lainie Yallen', 'Shardul Shah', 'Mark Xu', 'Aaref Hilaly', 'Panos Madamopoulos-Moraris']],
-  ['Board minutes', 'board', ['Lainie Yallen', 'Joon Sung Park', 'Shardul Shah', 'Mark Xu']],
-  ['Legal docs', 'lead', ['Lainie Yallen', 'Sanjeev Musuvathy', 'Shardul Shah', 'Mark Xu']],
-  ['Hiring plan', 'all', ['Lainie Yallen', 'Ally Waldman', 'Shardul Shah', 'Mark Xu', 'Aaref Hilaly', 'Panos Madamopoulos-Moraris']],
+  ['Overview deck', 'all', ['Josh Gao', 'Duy Nguyen', 'Anas Biad', 'Vance Spencer', 'Suzanne Xie']],
+  ['Financial model', 'lead', ['Josh Gao', 'Duy Nguyen', 'Strategic Finance Manager', 'Anas Biad', 'Vance Spencer']],
+  ['Cap table', 'lead', ['Josh Gao', 'Duy Nguyen', 'Anas Biad', 'Vance Spencer']],
+  ['Revenue report', 'all', ['Josh Gao', 'Duy Nguyen', 'Data Partnerships Lead', 'Anas Biad', 'Vance Spencer', 'Suzanne Xie']],
+  ['Customer contracts', 'lead', ['Josh Gao', 'Duy Nguyen', 'Data Partnerships Lead', 'Anas Biad']],
+  ['Product and hardware roadmap', 'all', ['Josh Gao', 'Jason Chong', 'Mogen Cheng', 'Anas Biad', 'Vance Spencer', 'Suzanne Xie']],
+  ['Board minutes', 'board', ['Josh Gao', 'Duy Nguyen', 'Jason Chong']],
+  ['Legal docs', 'lead', ['Josh Gao', 'Duy Nguyen', 'Chief of Staff', 'Anas Biad']],
+  ['Hiring plan', 'all', ['Josh Gao', 'Duy Nguyen', 'People Operations Lead', 'Anas Biad', 'Vance Spencer', 'Suzanne Xie']],
 ];
 
 export function dataRoomRows() {
@@ -1381,8 +1156,7 @@ function seedBoardInvestor() {
 }
 
 export const CLIENT_INDUSTRIES = [
-  'Consumer & Retail', 'Financial Services', 'Travel & Hospitality', 'Media & Entertainment',
-  'Automotive', 'Healthcare', 'Telecom',
+  'Robotics Lab', 'Frontier AI Lab', 'Big Tech', 'Enterprise', 'Research Partner',
 ];
 
 // Column types for Client Materials. "select" columns keep their own list of options.
@@ -1403,19 +1177,21 @@ export const CLIENT_FIELDS = [
   { key: 'clientPoc', label: 'PoC at Client' },
   { key: 'similePoc', label: 'Owner' },
   { key: 'industry', label: 'Industry', type: 'select', options: CLIENT_INDUSTRIES },
-  { key: 'testRunning', label: 'Test Running' },
+  { key: 'testRunning', label: 'Program Running' },
   { key: 'onsiteDate', label: 'Onsite Date', type: 'date' },
   { key: 'onsiteGoal', label: 'Onsite Goal' },
 ];
 
+// Public partners only: 1X (early data partner) and the EgoVerse research partners. Mecka's lab and
+// Big Tech customers aren't named publicly, so add them here.
 const CLIENTS = [
-  ['Deloitte', ''],
-  ['Wealthfront', 'Financial Services'],
-  ['Suntory', 'Consumer & Retail'],
-  ['CVS', 'Healthcare'],
-  ['Garnett Station Partners', 'Financial Services'],
-  ['Gallup', ''],
-  ['Itaú', 'Financial Services'],
+  ['1X Technologies', 'Robotics Lab'],
+  ['Meta', 'Research Partner'],
+  ['Georgia Tech', 'Research Partner'],
+  ['Stanford', 'Research Partner'],
+  ['MIT', 'Research Partner'],
+  ['UC San Diego', 'Research Partner'],
+  ['ETH Zürich', 'Research Partner'],
 ];
 
 export function clientFields() {
@@ -1447,7 +1223,7 @@ function seedRecruitment() {
     {
       id: 'rec-schools',
       title: 'School Partnerships',
-      note: 'Top schools for deep learning, AI, ML and simulation.',
+      note: 'Top schools for robotics, robot learning and computer vision.',
       entities: [],
       metrics: [],
       table: { fields: SCHOOL_FIELDS, rows: schoolRows() },
@@ -1469,7 +1245,7 @@ function seedRecruitment() {
     {
       id: 'rec-attendance',
       title: 'Event Attendance',
-      note: 'Conferences and events worth attending, plus the ones Simile and Joon have already been part of.',
+      note: 'Conferences and events worth attending, plus the ones Mecka and Josh have already been part of.',
       table: { fields: CONFERENCE_FIELDS, groups: CONFERENCE_GROUPS, rows: conferenceRows() },
       entities: [],
       metrics: [
@@ -1527,7 +1303,7 @@ export function mailStatusFor(id) {
 }
 
 const OTHER_MAIL = [
-  ['other', 'Office manager', 'Holiday party RSVP', '2026-11-04', 'Please RSVP by the 20th and note any dietary needs.'],
+  ['other', 'People Operations', 'Holiday party RSVP', '2026-11-04', 'Please RSVP by the 20th and note any dietary needs.'],
   ['other', 'Notion', 'Your weekly workspace digest', '2026-11-03', 'Twelve pages were edited this week.'],
 ];
 
@@ -1544,17 +1320,17 @@ export const SPRINT_TASK_DUE = {
 
 // Owners for the example sprint tasks (person ids).
 export const SPRINT_TASK_OWNER = {
-  'sprint-12-t1': 'person-lainie-yallen', 'sprint-12-t2': 'person-olivia-wang', 'sprint-12-t3': 'person-sanjeev-musuvathy', 'sprint-12-t4': 'person-rory-pan',
-  'sprint-11-t1': 'person-lainie-yallen', 'sprint-11-t2': 'person-sanjeev-musuvathy', 'sprint-11-t3': 'person-ally-waldman',
-  'sprint-10-t1': 'person-eileen-smith', 'sprint-10-t2': 'person-sanjeev-musuvathy',
+  'sprint-12-t1': 'person-duy-nguyen', 'sprint-12-t2': 'person-chief-of-staff', 'sprint-12-t3': 'person-chief-of-staff', 'sprint-12-t4': 'person-people-operations-lead',
+  'sprint-11-t1': 'person-duy-nguyen', 'sprint-11-t2': 'person-josh-gao', 'sprint-11-t3': 'person-people-operations-lead',
+  'sprint-10-t1': 'person-josh-gao', 'sprint-10-t2': 'person-data-partnerships-lead',
 };
 
 // A few calendar events for the week of Nov 2, so the week and day views have something to show.
 export const COO_WEEK_EVENTS = [
-  ['2026-11-02', '09:30', '1:1 with Lainie'],
-  ['2026-11-03', '13:00', 'Investor call: Greenoaks'],
-  ['2026-11-04', '11:00', 'Offsite venue walkthrough'],
-  ['2026-11-05', '15:30', 'Pipeline review with RevOps'],
+  ['2026-11-02', '09:30', '1:1 with Duy'],
+  ['2026-11-03', '13:00', 'Investor call: Sequoia'],
+  ['2026-11-04', '11:00', 'NYC office walkthrough with facilities'],
+  ['2026-11-05', '15:30', 'Pipeline review with Partnerships'],
   ['2026-11-06', '10:00', 'Weekly wrap-up and sprint check-in'],
   ['2026-11-06', '16:00', 'Prep for board deck review'],
 ];
@@ -1567,30 +1343,30 @@ export function seedCoo() {
   const cal = [
     ...COO_WEEK_EVENTS,
     ['2026-11-09', '09:00', 'Weekly ops review'],
-    ['2026-11-11', '14:00', 'Board prep with Lainie'],
+    ['2026-11-11', '14:00', 'Board prep with Duy'],
     ['2026-11-13', '10:00', 'Hiring sync'],
     ['2026-11-18', '', 'Investor update due'],
-    ['2026-11-20', '13:00', 'Client check-in: CVS'],
+    ['2026-11-20', '13:00', 'Partner check-in: 1X'],
     ['2026-11-24', '11:00', 'Sprint planning'],
   ];
   const mail = [
-    ['investors', 'Index Ventures', 'Scheduling the Q4 board meeting', '2026-11-04', 'Asking for three date options in early December.'],
-    ['investors', 'Greenoaks', 'Follow-up on the October update', '2026-11-03', 'Wants more detail on pipeline growth.'],
-    ['clients', 'CVS', 'Re: Onsite agenda for December', '2026-11-04', 'Confirmed the agenda and added two attendees.'],
-    ['clients', 'Wealthfront', 'Re: Pilot results', '2026-11-02', 'Happy with the results and asking about next steps.'],
-    ['candidates', 'Ashby', 'New applicant: Chief of Staff', '2026-11-04', 'Strong ops background, five years at a Series C startup.'],
-    ['candidates', 'Referral', 'Intro: ML engineer from Stanford', '2026-11-01', 'Referred by an advisor. Open to a call next week.'],
+    ['investors', 'Sequoia Capital', 'Scheduling the Q4 board meeting', '2026-11-04', 'Asking for three date options in early December.'],
+    ['investors', 'Framework Ventures', 'Follow-up on the October update', '2026-11-03', 'Wants more detail on the first commercial deployments.'],
+    ['clients', '1X Technologies', 'Re: Next capture batch', '2026-11-04', 'Confirmed the task list and delivery date for the next batch.'],
+    ['clients', 'Georgia Tech', 'Re: EgoVerse follow-up study', '2026-11-02', 'Asking about data access for a follow-up study.'],
+    ['candidates', 'Ashby', 'New applicant: Partner Operations Manager', '2026-11-04', 'Strong ops background, five years at a Series C startup.'],
+    ['candidates', 'Referral', 'Intro: robotics engineer from CMU', '2026-11-01', 'Referred by an advisor. Open to a call next week.'],
     ['spam', 'Vendor outreach', 'Grow your pipeline 10x this quarter', '2026-11-04', ''],
     ['spam', 'Event promo', 'Last chance for early-bird tickets', '2026-11-02', ''],
     ...OTHER_MAIL,
   ];
   const inquiries = [
-    ['needed', 'Offsite venue may be overbooked', 'Operations', 'The hotel has flagged a possible double booking for the December offsite.', 'Olivia Wang', '2026-11-14'],
-    ['needed', 'Expense approvals are backed up', 'Finance', 'About 30 expense reports are waiting on approval.', 'Lainie Yallen', '2026-11-10'],
-    ['needed', 'Laptops for new hires', 'IT', 'Three new hires start on the 17th and need laptops set up.', 'Matt Smith', '2026-11-12'],
-    ['solved', 'Badge access for the NYC office', 'Facilities', 'New badges were issued to the whole team.', 'Sanjeev Musuvathy', '2026-11-03'],
-    ['escalated', 'Contract terms with Itaú', 'Legal', 'Itaú asked for changes to the data terms that need sign-off.', 'Lainie Yallen', '2026-11-15'],
-    ['other', 'Team photo day', 'People', 'Pick a date for new headshots for the website.', 'Ally Waldman', '2026-11-21'],
+    ['needed', 'Capture rigs held at customs', 'Operations', 'A shipment of capture rigs from Shenzhen is waiting on customs paperwork.', 'Capture Operations Lead', '2026-11-14'],
+    ['needed', 'Expense approvals are backed up', 'Finance', 'About 30 expense reports are waiting on approval.', 'Strategic Finance Manager', '2026-11-10'],
+    ['needed', 'Laptops for new hires', 'IT', 'Three NYC hires start on the 17th and need laptops set up.', 'People Operations Lead', '2026-11-12'],
+    ['solved', 'Badge access for the NYC office', 'Facilities', 'New badges were issued to the whole team.', 'Chief of Staff', '2026-11-03'],
+    ['escalated', 'Data licensing terms with a lab customer', 'Legal', 'A lab customer asked for changes to the data licensing terms that need sign-off.', 'Josh Gao', '2026-11-15'],
+    ['other', 'Team photo day', 'People', 'Pick a date for new headshots for the website.', 'People Operations Lead', '2026-11-21'],
   ];
   const sprint = (id, name, start, end, tasks, goal, metrics, notes, team) => ({
     id, name, start, end,
@@ -1602,32 +1378,32 @@ export function seedCoo() {
     inbox: mail.map(([category, from, subject, date, summary], i) => ({ id: `coo-mail-${i + 1}`, category, from, subject, date, summary, status: MAIL_STATUS_SEED[i] || 'needs' })),
     inquiries: inquiries.map(([stage, title, department, description, owner, deadline], i) => ({ id: `coo-inq-${i + 1}`, stage, title, department, description, owner, deadline })),
     currentSprint: sprint('sprint-12', 'Sprint 12', '2026-11-02', '2026-11-13',
-      [['Finalize the Q4 board deck', false], ['Book the venue for the December offsite', true], ['Send the October investor update', true], ['Schedule the CVS onsite', false]],
+      [['Finalize the Q4 board deck', false], ['Book the venue for the December offsite', true], ['Send the October investor update', true], ['Set up desks and access for the NYC new hires', false]],
       'Walk into the Q4 board meeting with the deck, numbers and offsite plan locked.',
-      'Board deck approved by Lainie. Offsite venue signed. Investor update sent by the 18th.',
-      '', ['Lainie Yallen', 'Olivia Wang', 'Madison Fox']),
+      'Board deck approved by Duy. Offsite venue signed. Investor update sent by the 18th.',
+      '', ['Duy Nguyen', 'Chief of Staff', 'People Operations Lead']),
     pastSprints: [
       sprint('sprint-11', 'Sprint 11', '2026-10-19', '2026-10-30',
         [['Close Series B paperwork', true], ['Set up board deck template', true], ['Plan Q4 hiring', false]],
         'Wrap up the Series B and set up Q4 planning.',
         'All closing documents signed. Q4 hiring plan drafted.',
-        'Hiring plan moved to Sprint 12.', ['Lainie Yallen', 'Julia Lauer']),
+        'Hiring plan moved to Sprint 12.', ['Duy Nguyen', 'Josh Gao']),
       sprint('sprint-10', 'Sprint 10', '2026-10-05', '2026-10-16',
         [['Run the NYC customer dinner', true], ['Update investor list', true]],
         'Strengthen customer and investor relationships ahead of the raise.',
         'Dinner held with 12 executives. Investor list updated.',
-        '', ['Eileen Smith', 'Danny Wymer']),
+        '', ['Josh Gao', 'Data Partnerships Lead']),
     ],
   };
 }
 
 export const ROADMAP_NOTE = "This page supports GTM leadership’s operating rhythm. It brings together all action items, meetings and planning cycles, and it automates agendas, pre-reads, meeting notes and follow-through on action items.\n\nThe page is connected to Granola, email and Slack. Agents pull information from these sources, send back action items and notes, and store everything in Google Drive. Quick links also make this an all-in-one page for the team.\n\nThe page is organized into the following sections:\n\n1. Initiatives overview: progress on our current initiatives.\n2. Client materials: quick access to major client materials.\n3. OKRs: the major objectives for each team reporting to the COO.\n4. Calendar: links to the major plans for a bird’s-eye view of what’s coming up and the timelines for each date.\n5. Tracked goals and metrics: the revenue and major deployment metrics the team is working toward. Together, these represent our end vision for the quarter.\n\nClick any objective, whether in the roadmap or the calendar, to see a summary: description, links, owners and connections. The connections show where the information comes from, where it’s used and where it’s stored.";
 
-export const PIPELINE_NOTE = "This page shows our major revenue metrics.\n\nRevenue graph\nAt the top, the graph shows our revenue progression and current rate of growth.\n\nTarget accounts\nThis section tracks our progress with our target accounts. For each account, you’ll see:\n\n• Company name\n• Point of contact\n• Their title\n• Where we are in the sales process\n• Date last updated\n• A link to their materials in Google Drive\n\nTo qualify as a target account, a company must be in the Fortune 100, already be in contact with us and show strong potential to work with us.\n\nLead list\nThese are potential customers we’re working to engage, qualify and connect with the right buyer. We’ve highlighted the larger accounts we’d most like to engage quickly, along with their progress. Click the table to open HubSpot, where all the details live.\n\nAt a glance\nThis section shows the top 5 to 10 accounts and leads we want to focus on right now, the ones that have progressed the most or are moving fastest. Everything here is connected to HubSpot and updates automatically whenever changes are made there. To edit an account, click it to open it in HubSpot, where all its information lives.";
+export const PIPELINE_NOTE = "This page shows our major revenue metrics.\n\nRevenue graph\nAt the top, the graph shows our revenue progression and current rate of growth.\n\nTarget accounts\nThis section tracks our progress with our target accounts. For each account, you’ll see:\n\n• Company name\n• Point of contact\n• Their title\n• Where we are in the sales process\n• Date last updated\n• A link to their materials in Google Drive\n\nTo qualify as a target account, a company must be a frontier robotics lab, a frontier model team or a large enterprise deploying robots, already be in contact with us and show strong potential to work with us.\n\nLead list\nThese are potential customers we’re working to engage, qualify and connect with the right buyer. We’ve highlighted the larger accounts we’d most like to engage quickly, along with their progress. Click the table to open HubSpot, where all the details live.\n\nAt a glance\nThis section shows the top 5 to 10 accounts and leads we want to focus on right now, the ones that have progressed the most or are moving fastest. Everything here is connected to HubSpot and updates automatically whenever changes are made there. To edit an account, click it to open it in HubSpot, where all its information lives.";
 
-export const SCHEDULE_NOTE = "This page shows the schedules of the leadership and team members I’ll be working with. At the top, the Leadership Schedule Management and Team Management buttons take you straight to each section.\n\nLeadership Schedule Management\nThis section shows each leader’s meetings, who I’ll be working with and which city they’re in. The calendar shows where leaders will be this week, what they’re working on and their major milestones.\n\nI’ll coordinate this with the other EAs and the Chief of Staff so we stay on top of any changes and everyone has a bird’s-eye view of what each team member is doing.\n\nClick any item in the agenda to see more details: who is involved, the purpose of the trip or meeting, the dates, the city and any notes.\n\nTeam Management\nThis section highlights the key milestones for the week. The information is pulled automatically from the GTM Roadmap, so at a glance you can see exactly what we’re working toward this week.\n\nTeam bandwidth\nAt the bottom of the page, you can see each team member’s bandwidth and where they sit in the organization. Click a name or initials to see their full name, department and some of the tasks they’re working on.";
+export const SCHEDULE_NOTE = "This page shows the schedules of the leadership and team members I’ll be working with. At the top, the Leadership Schedule Management and Team Management buttons take you straight to each section.\n\nLeadership Schedule Management\nThis section shows each leader’s meetings, who I’ll be working with and which city they’re in. The calendar shows where leaders will be this week, what they’re working on and their major milestones.\n\nI’ll coordinate this with the founders and the Chief of Staff so we stay on top of any changes and everyone has a bird’s-eye view of what each team member is doing.\n\nClick any item in the agenda to see more details: who is involved, the purpose of the trip or meeting, the dates, the city and any notes.\n\nTeam Management\nThis section highlights the key milestones for the week. The information is pulled automatically from the GTM Roadmap, so at a glance you can see exactly what we’re working toward this week.\n\nTeam bandwidth\nAt the bottom of the page, you can see each team member’s bandwidth and where they sit in the organization. Click a name or initials to see their full name, department and some of the tasks they’re working on.";
 
-export const COO_NOTE = "Since I’ll be working closely with our COO, Lainie Yallen, this page is fully dedicated to supporting her.\n\nCalendar\nThe calendar shows Lainie’s schedule by month, week and day, along with everything she needs to get done. Click any item for more details.\n\nEmail\nIncoming emails are sorted by keyword into folders: investors, time-sensitive, potential candidates, spam and other. These folders can be adjusted as needed. I’ll go through these emails, escalate what needs her attention and handle what I can on my own. You can also check the status of each email to see how it’s been addressed.\n\nInquiries\nThis section tracks inquiries and issues that come up for leadership. They’re sorted into categories so we can spot problems early:\n\n• Needs attention\n• Solved\n• Escalated\n• Other\n\nThe categories can be adjusted as needed.\n\nAll inquiries live in HubSpot, and this page pulls from it directly. Team members can submit inquiries through Slack, and they go straight into HubSpot, so everything stays in sync. As work progresses, you can drag items between categories to show what’s done and what’s still open. Click any item to see a detailed description of the issue and who it involves.\n\nSprints\nThe current sprint shows the tasks to complete, the goal for the end of the sprint and who is responsible for each task. Past sprints are collapsed, and you can click to see the same details. Any unfinished task from a past sprint automatically moves to the next week unless marked otherwise.\n\nAt the bottom of the section, a visual overview shows sprint progress at a glance.\n\nOverall\nThis page keeps me focused on the exact goals of the people I work with, so I can track them and help us hit them.";
+export const COO_NOTE = "Since I’ll be working closely with our COO, Duy Nguyen, this page is fully dedicated to supporting her.\n\nCalendar\nThe calendar shows Duy’s schedule by month, week and day, along with everything she needs to get done. Click any item for more details.\n\nEmail\nIncoming emails are sorted by keyword into folders: investors, time-sensitive, potential candidates, spam and other. These folders can be adjusted as needed. I’ll go through these emails, escalate what needs her attention and handle what I can on my own. You can also check the status of each email to see how it’s been addressed.\n\nInquiries\nThis section tracks inquiries and issues that come up for leadership. They’re sorted into categories so we can spot problems early:\n\n• Needs attention\n• Solved\n• Escalated\n• Other\n\nThe categories can be adjusted as needed.\n\nAll inquiries live in HubSpot, and this page pulls from it directly. Team members can submit inquiries through Slack, and they go straight into HubSpot, so everything stays in sync. As work progresses, you can drag items between categories to show what’s done and what’s still open. Click any item to see a detailed description of the issue and who it involves.\n\nSprints\nThe current sprint shows the tasks to complete, the goal for the end of the sprint and who is responsible for each task. Past sprints are collapsed, and you can click to see the same details. Any unfinished task from a past sprint automatically moves to the next week unless marked otherwise.\n\nAt the bottom of the section, a visual overview shows sprint progress at a glance.\n\nOverall\nThis page keeps me focused on the exact goals of the people I work with, so I can track them and help us hit them.";
 
 export const BOARD_NOTE = "This page supports fundraising and managing our current board members. It keeps all of our fundraising and board materials in one easy-to-reach place, organized into:\n\n• Board decks\n• Investor updates\n• Pitch decks and recent drafts\n• Major milestones\n• Data room links\n• Current investors\n• Prospective investors\n\nA note on data room access: Only specific people have clearance to access the data room. I don’t have access myself, but the initials of everyone who does are listed here. If you need to check who can view it, this is the place to look.";
 export const EVENTS_NOTE = "This page holds all the events and offsites I’ve planned. For each one, you’ll find the details, a description, the tasks still to be done and its progress. Events are grouped by type.\n\nConversations with customer leads are tracked in HubSpot, and each event links directly to the related records in HubSpot.";
@@ -1635,17 +1411,18 @@ export const EVENTS_NOTE = "This page holds all the events and offsites I’ve p
 // Home: About Naureen.
 export const ABOUT_BACKGROUND = "I’ve spent my career so far on the revenue side of early-stage companies, first evaluating them and now building one. In venture capital, I sourced 10+ startups a week and diligenced pre-seed to Series A companies across North America. At Framework, my market, customer and exit analysis on a construction AI company supported a $15M check. My work also focused on deal flow and due diligence, and I supported LP reporting and the administrative side of fundraising. At Alumni, I focused on pre-seed and seed AI and deep tech startups, as well as building their presence within Canada.\n\nAfter graduating from McGill in May, I joined Planned in growth to step into the shoes of the people I’d been trying to support in previous years. My job description was “find problems in the company and solve them, then move to the next thing.” I built a new go-to-market motion from scratch, selling directly to event planners rather than procurement leaders and directors. It reached $2M in pipeline across 10 target cities and led to 12 booked calls a day. I rebuilt customer onboarding, which cut the sales cycle by 40% and lifted participation by 15%. Afterwards, I ran technical recruiting, sourcing 400+ candidates a week. I automated most of the operational work with Claude skills, Granola, Clay and HubSpot: meeting notes, action items, outreach, scheduling and forecasting dashboards. That way, I could focus on each customer or candidate.\n\nSince 2022, I’ve also organized startup events, including North Star, a sold-out 1,000-seat conference that grew sponsorship by $50K, as well as LP dinners, founder dinners and a trip that brought 30 builders from four cities to Toronto Tech Week.";
 
-export const ABOUT_EXPERIENCE = "At Planned, I opened a new revenue line selling directly to event planners instead of director-level buyers. I ran the full funnel for that segment myself: paid ads on Google, LinkedIn and Meta, outbound by email, phone and in person, sales, onboarding and customer success. I also kept Sales, Marketing, Customer Success and Product aligned on what I was learning. I built a system for every stage of the buying journey (awareness, evaluation and a well-timed touchpoint right before the decision) and automated outreach and retargeting to 2,000 to 3,000 prospects a week. I also built the forecasting dashboards we used to track it. The dashboards pulled everything from PostHog on how each user interacted with our ads, website and landing pages, along with their responses from calls, so we could see where each individual user stood. We tracked all of it in HubSpot. At Simile, I’d bring that context to the agendas, pre-reads, notes and action items behind GTM leadership’s operating rhythm. I’m excited to show some of the skills, automations and workflows that can be built on the backend, and to learn from my teammates how they’ve approached it, along with the interpersonal relationships that selling depends on.\n\nMy first role at McGill Ventures was executive assistant to the presidents, as we scaled the team from 7 people to 77. I managed our partnerships with VC firms and startups on their behalf, along with their major events. This meant managing two co-presidents with different priorities, as well as venture capital investors, founders and accelerators with their own priorities, while still building up the McGill Ventures brand. Within a year, I became chief of staff and then president. Along the way, I built the SOPs, templates and processes that took the organization from 7 people to 77, running 15 to 18 events and five programs a year. Across my roles, I’ve represented leaders to the same four groups this role serves: customers, partners, investors and candidates. I believe the key to my success here was nurturing relationships across the ecosystem that really supported sustainable growth for us. I was hands-on with all initiatives, covering responsibilities from ideation, execution and sales to passing the program down to the next leaders or event teardown.\n\nI treat events as part of go-to-market or as a lever to build culture. At Planned, I hosted four events in major cities to build brand awareness, and they also helped us fill two senior roles and one junior role within two weeks. At the same time, I was growing our social media, which took candidate inflow from the occasional applicant to 80 applications overnight per post. I sold out North Star’s 1,000 seats with 23 panelists and grew our sponsorship by $50K. In venture, I ran portfolio showcases, LP dinners and AGMs end to end. For Project Atlas, I raised $25K in corporate sponsorships to bring 30 builders from four cities to Toronto Tech Week and ran nine events with 12 partner firms. I’d bring the same discipline to Simile’s executive customer dinners, sales kickoffs, offsites and conference presence: every guest list, run of show and follow-up built to move a relationship forward.";
+export const ABOUT_EXPERIENCE = "At Planned, I opened a new revenue line selling directly to event planners instead of director-level buyers. I ran the full funnel for that segment myself: paid ads on Google, LinkedIn and Meta, outbound by email, phone and in person, sales, onboarding and customer success. I also kept Sales, Marketing, Customer Success and Product aligned on what I was learning. I built a system for every stage of the buying journey (awareness, evaluation and a well-timed touchpoint right before the decision) and automated outreach and retargeting to 2,000 to 3,000 prospects a week. I also built the forecasting dashboards we used to track it. The dashboards pulled everything from PostHog on how each user interacted with our ads, website and landing pages, along with their responses from calls, so we could see where each individual user stood. We tracked all of it in HubSpot. At Mecka, I’d bring that context to the BD and sales team: research, outreach, pipeline tracking, and the decks and meeting materials behind each conversation. I’m excited to show some of the skills, automations and workflows that can be built on the backend, and to learn from my teammates how they’ve approached it, along with the interpersonal relationships that selling depends on.\n\nMy first role at McGill Ventures was executive assistant to the presidents, as we scaled the team from 7 people to 77. I managed our partnerships with VC firms and startups on their behalf, along with their major events. This meant managing two co-presidents with different priorities, as well as venture capital investors, founders and accelerators with their own priorities, while still building up the McGill Ventures brand. Within a year, I became chief of staff and then president. Along the way, I built the SOPs, templates and processes that took the organization from 7 people to 77, running 15 to 18 events and five programs a year. Across my roles, I’ve represented leaders to the same four groups this role serves: customers, partners, investors and candidates. I believe the key to my success here was nurturing relationships across the ecosystem that really supported sustainable growth for us. I was hands-on with all initiatives, covering responsibilities from ideation, execution and sales to passing the program down to the next leaders or event teardown.\n\nI treat events as part of go-to-market or as a lever to build culture. At Planned, I hosted four events in major cities to build brand awareness, and they also helped us fill two senior roles and one junior role within two weeks. At the same time, I was growing our social media, which took candidate inflow from the occasional applicant to 80 applications overnight per post. I sold out North Star’s 1,000 seats with 23 panelists and grew our sponsorship by $50K. In venture, I ran portfolio showcases, LP dinners and AGMs end to end. For Project Atlas, I raised $25K in corporate sponsorships to bring 30 builders from four cities to Toronto Tech Week and ran nine events with 12 partner firms. I’d bring the same discipline to Mecka’s NYC office events, customer and investor visits, offsites and conference presence: every guest list, run of show and follow-up built to move a relationship forward.";
 
-export const ABOUT_GOALS = "I want to spend my time with founders who are solving the hardest problems and with teams that hold the highest bar for quality. I’m optimizing for the steepest learning curve and for real impact through the product I work on.\n\nSimile offers exactly that. The chance to work under a COO like Lainie Yallen, who scaled Hebbia 15x in under two years and now leads sales and customer-facing work in the emerging field of simulation for business decision-making, shows me the caliber of talent Simile attracts. I want to contribute my strengths in coordination, organization and events while learning everything I can from the team, and help build a generational company. I know that in the long run I want to be a founder. That’s why working with somebody whose leadership I respect so deeply is important to me. I want to absorb every bit of information in every different type of situation possible.\n\nI also appreciate the nature of Simile’s technology. Since it allows businesses to run their decisions through simulations with 85% accuracy, businesses will not have to use unconscionable human data or spend millions on third-party data. This really advances how business and technology interact, because it would reduce risk on the cybersecurity side. It would increase access to better decision-making on the business side and likely also reduce the cost of doing such deep research on a market. This type of technology is bound to change the world. Now it’s up to the best team to execute on it, and I believe that’s the team at Simile, given their amazing track record and professionalism.";
+export const ABOUT_GOALS = "I want to spend my time with founders who are solving the hardest problems and with teams that hold the highest bar for quality. I’m optimizing for the steepest learning curve and for real impact through the product I work on.\n\nMecka offers exactly that. Josh, Jason, Duy and Mogen have built and sold companies before, and in under two years Mecka passed $100M in run-rate revenue, raised from Sequoia, NVIDIA and Microsoft, and became a data supplier to frontier robotics labs. That shows me the caliber of team Mecka attracts. As Office Manager in New York, I want to contribute my strengths in coordination, organization and events while learning everything I can from the team, and help build a generational company. I know that in the long run I want to be a founder. That’s why working with founders whose leadership I respect so deeply is important to me. I want to absorb every bit of information in every different type of situation possible.\n\nI also appreciate the nature of Mecka’s technology. Robots can’t learn from the internet the way language models did, because the internet never recorded how people actually move and work with their hands. Mecka captures that data from real people doing real tasks, with its own sensors and a global capture operation, and turns it into datasets robotics teams can train on. Mecka believes robotics will be the largest GDP-expanding technology ever, and data is what holds it back today. Now it’s up to the best team to execute on it, and I believe that’s the team at Mecka.";
 
 export const ABOUT_WHY = "This page goes through all the major tasks and responsibilities described in the job description, as well as what I’ve learned from conversations with people on the team. I want to show how I’m approaching the role and what systems I would love to put in place within the first week of joining.";
 
-// Pipeline & Forecasts. Example revenue: $0 at founding (Oct 2025), 5x in the last 5 months, $200M now.
+// Pipeline & Forecasts. Example run-rate revenue: launch in Aug 2025, past $100M in Jun 2026 (Mecka's
+// Series B post), heading toward the $300M year-end target. Months in between are illustrative.
 export const REVENUE_HISTORY = [
-  ['2025-10', 0], ['2025-11', 0.6e6], ['2025-12', 1.8e6], ['2026-01', 3.8e6], ['2026-02', 7.2e6],
-  ['2026-03', 12.5e6], ['2026-04', 19.5e6], ['2026-05', 28.5e6], ['2026-06', 40e6],
-  ['2026-07', 55.2e6], ['2026-08', 76.1e6], ['2026-09', 105.1e6], ['2026-10', 145e6], ['2026-11', 200e6],
+  ['2025-08', 0], ['2025-09', 1e6], ['2025-10', 3e6], ['2025-11', 6e6], ['2025-12', 11e6],
+  ['2026-01', 19e6], ['2026-02', 30e6], ['2026-03', 45e6], ['2026-04', 62e6], ['2026-05', 82e6],
+  ['2026-06', 105e6], ['2026-07', 135e6], ['2026-08', 165e6], ['2026-09', 195e6], ['2026-10', 225e6], ['2026-11', 255e6],
 ].map(([month, revenue]) => ({ month, revenue }));
 
 const LEAD_SOURCES = ['Inbound', 'Outbound', 'Event', 'Referral', 'Partner', 'Investor intro'];
@@ -1676,16 +1453,16 @@ export function seedPipeline() {
   const rows = (prefix, list) => list.map(([company, poc, buyer, status, updated, source], i) => ({ id: `${prefix}-${i + 1}`, company, poc, buyer, status, updated, materials: '', source }));
   return {
     'target-accounts': rows('ta', [
-      ['Unilever', 'Danny Wymer', 'VP of Consumer Insights', 'Meeting booked', '2026-11-04', 'Outbound'],
-      ['Delta Air Lines', 'Chris Jensen', 'Head of Customer Research', 'Demo', '2026-11-02', 'Event'],
-      ['Pfizer', 'Danny Brown', 'Director of Market Research', 'Proposal sent', '2026-11-05', 'Referral'],
-      ['Verizon', "Sam O'Meara", 'VP of Customer Experience', 'Demo', '2026-10-30', 'Outbound'],
+      ['Figure AI', 'Data Partnerships Lead', 'Head of Data', 'Meeting booked', '2026-11-04', 'Outbound'],
+      ['Agility Robotics', 'Josh Gao', 'VP of AI', 'Demo', '2026-11-02', 'Event'],
+      ['Apptronik', 'Data Partnerships Lead', 'Head of Robot Learning', 'Proposal sent', '2026-11-05', 'Referral'],
+      ['Skild AI', 'Duy Nguyen', 'Head of Data', 'Demo', '2026-10-30', 'Investor intro'],
     ]),
     'lead-lists': rows('ll', [
-      ['Nike', 'Noah Glazov', 'Senior Manager, Consumer Insights', 'New', '2026-11-05', 'Inbound'],
-      ['Mastercard', 'Lori Ferro', 'Head of Research', 'Contacted', '2026-11-03', 'Event'],
-      ['Spotify', 'Conor Leary', 'Director of User Research', 'Qualified', '2026-11-04', 'Inbound'],
-      ['Marriott', 'Giorgio Loiacono', 'VP of Guest Insights', 'New', '2026-11-01', 'Investor intro'],
+      ['Boston Dynamics', 'Growth Lead', 'Director of AI Research', 'New', '2026-11-05', 'Inbound'],
+      ['Physical Intelligence', 'Data Partnerships Lead', 'Head of Data', 'Contacted', '2026-11-03', 'Event'],
+      ['Toyota Research Institute', 'Growth Lead', 'Robotics Research Lead', 'Qualified', '2026-11-04', 'Inbound'],
+      ['Amazon Robotics', 'Duy Nguyen', 'Director of Applied Science', 'New', '2026-11-01', 'Investor intro'],
     ]),
   };
 }
@@ -1737,7 +1514,7 @@ export function seedData() {
     // Home page: About Naureen, Why I Built This and a note for each page card.
     home: { background: ABOUT_BACKGROUND, experience: ABOUT_EXPERIENCE, goals: ABOUT_GOALS, why: ABOUT_WHY },
     pageNotes: {
-      recruitment: 'After the chat with Sanjeev, there is a need for hiring support. Here are a couple of ideas I can put together in my first days to start a system for recruiting technical talent. Sourcing and scheduling need to be automated and systemized, while the interviews stay personal, with people engaging candidates and giving us a chance to build relationships with them.\n\nThis page is about bringing top-of-funnel talent to Simile.\n\nA note on events: partnering with others on events is much more interesting, since it has the same impact for far less time and effort. With school partnerships, the goal is to build relationships early, so that when very strong talent comes along, it gets funneled to us quickly.\n\nTo build a successful funnel for Simile, we need several long-term relationships in place. That’s why we’re looking at:\n\n• School partnerships for newcomers\n• Event sponsorships for people already in the ecosystem\n• Event attendance, to understand who we’re getting in front of and whether they’re the right people, whether that’s a future client or a future employee\n• Event partnerships, as our ICPs converge\n• The total count from leads to interviews booked, and the gap between them',
+      recruitment: 'Mecka has grown from about 40 people in June to about 58 now, with open roles in hardware, research and partnerships, so there is a need for hiring support. Here are a couple of ideas I can put together in my first days to start a system for recruiting technical talent. Sourcing and scheduling need to be automated and systemized, while the interviews stay personal, with people engaging candidates and giving us a chance to build relationships with them.\n\nThis page is about bringing top-of-funnel talent to Mecka.\n\nA note on events: partnering with others on events is much more interesting, since it has the same impact for far less time and effort. With school partnerships, the goal is to build relationships early, so that when very strong talent comes along, it gets funneled to us quickly.\n\nTo build a successful funnel for Mecka, we need several long-term relationships in place. That’s why we’re looking at:\n\n• School partnerships for newcomers\n• Event sponsorships for people already in the ecosystem\n• Event attendance, to understand who we’re getting in front of and whether they’re the right people, whether that’s a future client or a future employee\n• Event partnerships, as our ICPs converge\n• The total count from leads to interviews booked, and the gap between them',
       schedule: SCHEDULE_NOTE,
       documentation: 'This page keeps all the processes, SOPs and helpful links in one place, so they’re easy to find for me, anyone working with me and anyone I need to train. I can just send them this page. It also keeps the history and the lists I used for each of my campaigns. I made it to save time for myself and for anyone I work with.',
       roadmap: ROADMAP_NOTE,

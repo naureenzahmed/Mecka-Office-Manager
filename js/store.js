@@ -1,7 +1,7 @@
 import { isReadOnly } from './readOnly.js';
 import { seedData, NAME_CHANGES, POTENTIAL_POCS, INVESTOR_PARTNERS, TECH_STACK_FIELDS, techStackRows, seedLeadershipSchedule, SCHOOL_FIELDS, schoolRows, CONFERENCE_FIELDS, conferenceRows, PARTNER_FIELDS, potentialInvestorRows, currentInvestorRows, clientFields, clientRows, cooOtherMail, OKR_DEPARTMENTS, starterOkr, TEAMS, OLD_TEAM_MAP, seedPeople, personId, isCurrentInvestor, scheduleCityFor, seedDocLibrary, eventChecklist, EVENT_PHASES, QUIRKS_LA, TOOL_ACCESS_NOTE, TOOL_ACCESS_FIELDS, toolAccessRows, CONFERENCE_FIXES, CONFERENCE_GROUPS, conferenceGroupOf, TECH_STACK_COSTS, ABOUT_BACKGROUND, ABOUT_EXPERIENCE, ABOUT_GOALS, ABOUT_WHY, ROADMAP_NOTE, PIPELINE_NOTE, SCHEDULE_NOTE, COO_NOTE, BOARD_NOTE, EVENTS_NOTE, seedMilestones, teamMemberPeople, leaderBandwidth, PERSON_FOCUS, mailStatusFor, SPRINT_TASK_DUE, SPRINT_TASK_OWNER, cooWeekEvents, dataRoomRows, placeholderEvents, eventOwnerAt, SALES_DOC_TITLES } from './seed.js';
 
-const STORAGE_KEY = 'meckaOfficeData.v1';
+const STORAGE_KEY = 'meckaOfficeData.v2';
 
 // Copy edit (2026-11): old starter text -> corrected text. Only exact matches change,
 // so anything someone typed in themselves is left alone.
